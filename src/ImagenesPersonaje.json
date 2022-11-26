@@ -1,0 +1,62 @@
+{
+
+  "Caballero": {
+
+    "1":{
+      "DEFAULT": ".\\src\\CharacterAppearance\\caballero1Default.png",
+      "MOVE": ".\\src\\CharacterAppearance\\caballero1Move.png",
+      "ATTACK": ".\\src\\CharacterAppearance\\caballero1Attack.png",
+      "DEAD": ".\\src\\CharacterAppearance\\caballero1Dead.png"
+    },
+    "2":{
+      "DEFAULT": ".\\src\\CharacterAppearance\\caballero1Default.png",
+      "MOVE": ".\\src\\CharacterAppearance\\caballero1Move.png",
+      "ATTACK": ".\\src\\CharacterAppearance\\caballero1Attack.png",
+      "DEAD": ".\\src\\CharacterAppearance\\caballero1Dead.png"
+    },
+    "3":{
+      "DEFAULT": ".\\src\\CharacterAppearance\\caballero1Default.png",
+      "MOVE": ".\\src\\CharacterAppearance\\caballero1Move.png",
+      "ATTACK": ".\\src\\CharacterAppearance\\caballero1Attack.png",
+      "DEAD": ".\\src\\CharacterAppearance\\caballero1Dead.png"
+    }
+
+  },
+  "Ghost": {
+
+    "1": {
+      "DEFAULT": ".\\src\\CharacterAppearance\\ghost1Default.png",
+      "MOVE": ".\\src\\CharacterAppearance\\ghost1Move.png",
+      "ATTACK": ".\\src\\CharacterAppearance\\ghost1Attack.png",
+      "DEAD": ".\\src\\CharacterAppearance\\ghost1Dead.png"
+    }
+  },
+  "Witch": {
+
+    "1": {
+      "DEFAULT": ".\\src\\CharacterAppearance\\witch1Default.png",
+      "MOVE": ".\\src\\CharacterAppearance\\witch1Move.png",
+      "ATTACK": ".\\src\\CharacterAppearance\\witch1Attack.png",
+      "DEAD": ".\\src\\CharacterAppearance\\witch1Dead.png"
+    },
+    "2": {
+      "DEFAULT": ".\\src\\CharacterAppearance\\witch1Default.png",
+      "MOVE": ".\\src\\CharacterAppearance\\witch1Move.png",
+      "ATTACK": ".\\src\\CharacterAppearance\\witch1Attack.png",
+      "DEAD": ".\\src\\CharacterAppearance\\witch1Dead.png"
+    }
+  },
+  "Warlock": {
+
+    "1": {
+      "DEFAULT": ".\\src\\CharacterAppearance\\warlock1Default.png",
+      "MOVE": ".\\src\\CharacterAppearance\\warlock1Move.png",
+      "ATTACK": ".\\src\\CharacterAppearance\\warlock1Attack.png",
+      "DEAD": ".\\src\\CharacterAppearance\\warlock1Dead.png"
+    }
+  }
+
+
+
+
+}

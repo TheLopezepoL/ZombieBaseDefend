@@ -1,0 +1,16 @@
+{
+  "Default": {
+    "1": ".\\src\\WeaponAppearance\\default1.png"
+
+  },
+  "Katana": {
+    "1": ".\\src\\WeaponAppearance\\Katana1.png",
+    "2": ".\\src\\WeaponAppearance\\Katana2.png"
+
+  },
+  "Crossbow": {
+    "1": ".\\src\\WeaponAppearance\\crossbow1.png"
+
+  }
+
+}
