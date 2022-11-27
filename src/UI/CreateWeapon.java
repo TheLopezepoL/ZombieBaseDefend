@@ -1,7 +1,10 @@
 package UI;
 
+import ADT.Characters.Character;
 import ADT.Controller.MainController;
+import ADT.Enums.EnumCharacters;
 import ADT.Enums.EnumWeapons;
+import ADT.State;
 import ADT.Weapon.aWeapon;
 
 import javax.swing.*;
@@ -29,6 +32,7 @@ public class CreateWeapon extends JDialog {
     private JPanel createWeaponPanel;
     private JSpinner campos_spinner;
     String selectedPathFile;
+    protected Character.BuilderCharacter builderCharacter;
 
     public CreateWeapon(JFrame parent) {
         super(parent);
@@ -37,6 +41,7 @@ public class CreateWeapon extends JDialog {
         setMinimumSize(new Dimension(480, 474));
         setModal(true);
         setLocationRelativeTo(parent);
+        builderCharacter = new Character.BuilderCharacter();
 
 
         cbTipo.setModel(new DefaultComboBoxModel<>(EnumWeapons.values()));
@@ -51,18 +56,27 @@ public class CreateWeapon extends JDialog {
                 int radio = (Integer) spRadio.getValue();
                 EnumWeapons tipo = (EnumWeapons) cbTipo.getSelectedItem();
                 int nivel = (Integer) spinner_nivel.getValue();
+                int campos = (Integer) campos_spinner.getValue();
                 int vida = (Integer) spinner_vida.getValue();
                 ImageIcon imageIcon = new ImageIcon(selectedPathFile);
 
+                aWeapon arma = MainController.controlador.createBaseWeapon(name,alcance,danho,radio,velocidad,tipo,imageIcon);
 
-                if (MainController.controlador.getArmaByNombre(name) != null) {
-                    JOptionPane.showMessageDialog(null, "ERROR! Ya hay un arma generada con este nombre");
-                    return;
-                }
+                Character nuevoCharacter = builderCharacter.setName(name)
+                        .setVida(vida)
+                        .setNivel(nivel)
+                        .setCosto(0)
+                        .setEsEnemigo(false)
+                        .setCampos(campos)
+                        .setNivelAparicion(nivel)
+                        .setEstado(State.DEFAULT)
+                        .setTipo(EnumCharacters.TERRESTRE)
+                        .setImagen(imageIcon)
+                        .addWeapon(arma)
+                        .build();
 
-                aWeapon arma = MainController.controlador.createBaseWeapon(name, alcance, danho, radio, velocidad, nivel, tipo, vida, imageIcon);
                 if (arma != null) {
-                    MainController.controlador.getBaseWeapons().add(arma);
+                    MainController.controlador.getBaseCharacters().add(nuevoCharacter);
                     JOptionPane.showMessageDialog(null, "Success");
                 } else {
                     JOptionPane.showMessageDialog(null, "Error");
@@ -73,7 +87,7 @@ public class CreateWeapon extends JDialog {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainController.controlador.serializarArmas();
+                MainController.controlador.serializarPersonajes();
                 dispose();
             }
         });

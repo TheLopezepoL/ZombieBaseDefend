@@ -7,10 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.io.*;
 import java.nio.file.*;
-
 import ADT.Characters.Character;
 import ADT.Characters.TypesFactory;
 import ADT.Enums.EnumWeapons;
@@ -20,9 +18,7 @@ import ADT.Weapon.aWeapon;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import javax.imageio.ImageIO;
-
 import javax.swing.*;
 
 public class controllerSingleton {
@@ -226,8 +222,8 @@ public class controllerSingleton {
         return null;
     }
 
-    public void setArmas(ArrayList<aWeapon> armas){
-        this.base_weapons = armas;
+    public void setEstructuras(ArrayList<Character> armas){
+        this.base_characters = armas;
     }
 
     public Character getCharacterByNombre(String nombrePersonaje) {
@@ -240,8 +236,8 @@ public class controllerSingleton {
     }
 
     //CREAR ARMAS---------------------------------------
-    public aWeapon createBaseWeapon(String nombre, double alcance, double danho, double radioExplosion, double velocidadAtaque, int nivel, EnumWeapons tipoArma, int vida, ImageIcon imagen) {
-        return factoryWeapons.FabricarWeapon(nombre, alcance, danho, velocidadAtaque, radioExplosion, nivel, tipoArma, imagen, vida);
+    public aWeapon createBaseWeapon(String nombre, double alcance, double danho, double radioExplosion, double velocidadAtaque, EnumWeapons tipoArma, ImageIcon imagen) {
+        return factoryWeapons.FabricarWeapon(nombre, alcance, danho, velocidadAtaque, radioExplosion, tipoArma, imagen);
     }
 
     //JSON
@@ -315,25 +311,28 @@ public class controllerSingleton {
     }
 
 
-    public void serializarArmas() {
+    public void serializarPersonajes() {
 
-        Path pathSerializable = Paths.get(stringRelativePathSerializables.concat("\\armasSerializadas" + ".txt"));
-        File fileSerializble = new File(pathSerializable.toString());
+        Path pathSerializablePersonajes = Paths.get(stringRelativePathSerializables.concat("\\personajesSerializados.txt"));
+        File fileSerializblePersonajes = new File(pathSerializablePersonajes.toString());
+        ArrayList<Character> personajes = new ArrayList<>();
+        personajes.addAll(getEnemigos());
+        personajes.addAll(getBaseCharacters());
         try {
-            FileOutputStream fos = new FileOutputStream(fileSerializble);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(getBaseWeapons());
-            oos.close();
-            fos.close();
+            FileOutputStream fosEstrucutras = new FileOutputStream(fileSerializblePersonajes);
+            ObjectOutputStream oosPersonajes = new ObjectOutputStream(fosEstrucutras);
+            oosPersonajes.writeObject(personajes);
+            oosPersonajes.close();
+            fosEstrucutras.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
 
 
-    public void readArmas() {
-        ArrayList<aWeapon> armas = new ArrayList<>();
-        Path pathSerializable = Paths.get(stringRelativePathSerializables.concat("\\armasSerializadas" + ".txt"));
+    public void readCharacters() {
+        ArrayList<Character> personajes = new ArrayList<>();
+        Path pathSerializable = Paths.get(stringRelativePathSerializables.concat("\\personajesSerializados.txt"));
         File fileSerializble = new File(pathSerializable.toString());
 
         try {
@@ -344,7 +343,7 @@ public class controllerSingleton {
             FileInputStream fis = new FileInputStream(fileSerializble);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
-            armas = (ArrayList) ois.readObject();
+            personajes = (ArrayList) ois.readObject();
 
             ois.close();
             fis.close();
@@ -356,11 +355,14 @@ public class controllerSingleton {
             c.printStackTrace();
             return;
         }
-        setArmas(armas);
 
-//Verify list data
-        for (aWeapon arma : armas) {
-            System.out.println(arma);
+        for (Character personaje : personajes) {
+            if (personaje.getIsEnemigo()){
+                getEnemigos().add(personaje);
+            }
+            else {
+                getBaseCharacters().add(personaje);
+            }
         }
 
     }

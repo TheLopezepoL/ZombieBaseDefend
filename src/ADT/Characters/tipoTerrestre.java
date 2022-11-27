@@ -43,7 +43,7 @@ public class tipoTerrestre extends aTipo{
         enemigo.setVida(danho);
         if (enemigo.vida <= 0){
             enemigo.setEstado(State.DEAD);
-            enemigo.updateImagen();
+            //enemigo.updateImagen();
         }
         System.out.println("Daño total: "+danho+" Nueva vida: "+enemigo.vida);
         return 0;

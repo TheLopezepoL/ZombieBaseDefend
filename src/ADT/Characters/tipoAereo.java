@@ -42,7 +42,7 @@ public class tipoAereo extends aTipo{
         enemigo.setVida(danho*2);
         if (enemigo.vida <= 0){
             enemigo.setEstado(State.DEAD);
-            enemigo.updateImagen();
+            //enemigo.updateImagen();
         }
         System.out.println("Daño total: "+danho*2+" Nueva vida: "+enemigo.vida);
         return 0;

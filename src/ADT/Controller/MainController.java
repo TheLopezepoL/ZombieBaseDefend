@@ -18,7 +18,7 @@ public class MainController {
     public static void main(String[] args) {
 
         controlador = controllerSingleton.getController();
-        controlador.readArmas();
+        controlador.readCharacters();
         CreateWeapon crearArma = new CreateWeapon(null);
     }
 }

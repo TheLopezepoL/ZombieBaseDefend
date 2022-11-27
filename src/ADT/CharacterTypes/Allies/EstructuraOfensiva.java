@@ -40,7 +40,7 @@ public class EstructuraOfensiva extends Estructura {
                 if (enemigo.getVida() <= 0) {
                     enemigo.addToBitacora("He sido asesinado!");
                     enemigo.setEstado(State.DEAD);
-                    enemigo.updateImagen();
+                    //enemigo.updateImagen();
                 }
             }
         }

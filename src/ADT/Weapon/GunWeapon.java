@@ -6,7 +6,7 @@ import java.awt.*;
 public class GunWeapon extends aWeapon{
 
 
-    public GunWeapon(String nombre, double alcance, double danho, double radioExplosion, double velocidadDeAtaque, int nivel, int vida, ImageIcon Imagen) {
+    public GunWeapon(String nombre, double alcance, double danho, double radioExplosion, double velocidadDeAtaque, ImageIcon Imagen) {
         super(nombre, alcance, danho, radioExplosion, velocidadDeAtaque, "FUEGO", Imagen);
     }
 
