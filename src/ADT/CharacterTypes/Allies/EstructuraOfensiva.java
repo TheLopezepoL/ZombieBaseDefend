@@ -7,7 +7,7 @@ import ADT.Weapon.aWeapon;
 
 import java.util.ArrayList;
 
-public class EstructuraOfensiva extends Estructura{
+public class EstructuraOfensiva extends Estructura {
     @Override
     public int atacar(Character infoCharacter, ArrayList<Character> enemigos) {
         for (Character enemigo : enemigos) {
@@ -35,12 +35,13 @@ public class EstructuraOfensiva extends Estructura{
 
                 }
                 enemigo.setVida(danho);
+                enemigo.addToBitacora("Daño recibido: " + danho + " Nueva vida: " + enemigo.getVida());
+                infoCharacter.addToBitacora("Daño total: " + danho + " Nueva vida: " + enemigo.getVida());
                 if (enemigo.getVida() <= 0) {
+                    enemigo.addToBitacora("He sido asesinado!");
                     enemigo.setEstado(State.DEAD);
                     enemigo.updateImagen();
                 }
-                enemigo.addToBitacora("Daño recibido: " + danho + " Nueva vida: " + enemigo.getVida());
-                infoCharacter.addToBitacora("Daño total: " + danho + " Nueva vida: " + enemigo.getVida());
             }
         }
         return 0;

@@ -11,11 +11,6 @@ public class Zombie extends aTipo {
         return 0;
     }
 
-    @Override
-    public int atacar(Character character, Character character1) {
-        return 0;
-    }
-
 
     @Override
     public boolean moverse(Character character, int i, int i1) {

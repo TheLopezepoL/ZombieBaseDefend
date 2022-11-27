@@ -14,7 +14,6 @@ public class tipoAereo extends aTipo{
         return 0;
     }
 
-    @Override
     public  int atacar(Character infoCharacter, Character enemigo){
         double vidaAnterior = enemigo.vida;
         System.out.println("Ataca a "+enemigo.nombre +" Vida Anterior: " +vidaAnterior);

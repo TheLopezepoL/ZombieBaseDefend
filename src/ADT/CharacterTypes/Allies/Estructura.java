@@ -9,17 +9,12 @@ public class Estructura extends aTipo {
 
 
     @Override
-    public int atacar(Character infoCharacter, ArrayList<Character> enemigo) {
+    public int atacar(Character infoCharacter, ArrayList<Character> enemigos) {
         return 0;
     }
 
     @Override
-    public int atacar(Character character, Character character1) {
-        return 0;
-    }
-
-    @Override
-    public boolean moverse(Character character, int i, int i1) {
+    public boolean moverse(Character character, int x, int y) {
         return false;
     }
 }
