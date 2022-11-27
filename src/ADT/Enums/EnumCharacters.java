@@ -1,6 +1,5 @@
 package ADT.Enums;
 
 public enum EnumCharacters {
-    TERRESTRE,
-    AEREO
+    CONTACTO,MEDIANO,AEREO,IMPACTO,MULTIPLE,BLOQUE
 }

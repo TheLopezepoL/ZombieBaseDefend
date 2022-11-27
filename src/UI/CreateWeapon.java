@@ -31,6 +31,7 @@ public class CreateWeapon extends JDialog {
     private JComboBox cbTipo;
     private JPanel createWeaponPanel;
     private JSpinner campos_spinner;
+    private JSpinner spinner_ataques;
     String selectedPathFile;
     protected Character.BuilderCharacter builderCharacter;
 
@@ -54,13 +55,14 @@ public class CreateWeapon extends JDialog {
                 int danho = (Integer) spDanho.getValue();
                 int velocidad = (Integer) spVelocidad.getValue();
                 int radio = (Integer) spRadio.getValue();
-                EnumWeapons tipo = (EnumWeapons) cbTipo.getSelectedItem();
+                EnumCharacters tipo = (EnumCharacters) cbTipo.getSelectedItem();
                 int nivel = (Integer) spinner_nivel.getValue();
                 int campos = (Integer) campos_spinner.getValue();
                 int vida = (Integer) spinner_vida.getValue();
+                int cantAtaques = (Integer) spinner_ataques.getValue();
                 ImageIcon imageIcon = new ImageIcon(selectedPathFile);
 
-                aWeapon arma = MainController.controlador.createBaseWeapon(name,alcance,danho,radio,velocidad,tipo,imageIcon);
+                aWeapon arma = MainController.controlador.createBaseWeapon(name,alcance,danho,radio,velocidad, tipo,imageIcon, cantAtaques);
 
                 Character nuevoCharacter = builderCharacter.setName(name)
                         .setVida(vida)
@@ -70,7 +72,7 @@ public class CreateWeapon extends JDialog {
                         .setCampos(campos)
                         .setNivelAparicion(nivel)
                         .setEstado(State.DEFAULT)
-                        .setTipo(EnumCharacters.TERRESTRE)
+                        .setTipo(tipo)
                         .setImagen(imageIcon)
                         .addWeapon(arma)
                         .build();

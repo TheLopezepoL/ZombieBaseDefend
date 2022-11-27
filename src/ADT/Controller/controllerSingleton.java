@@ -11,7 +11,7 @@ import java.io.*;
 import java.nio.file.*;
 import ADT.Characters.Character;
 import ADT.Characters.TypesFactory;
-import ADT.Enums.EnumWeapons;
+import ADT.Enums.EnumCharacters;
 import ADT.State;
 import ADT.Weapon.WeaponFactory;
 import ADT.Weapon.aWeapon;
@@ -236,8 +236,9 @@ public class controllerSingleton {
     }
 
     //CREAR ARMAS---------------------------------------
-    public aWeapon createBaseWeapon(String nombre, double alcance, double danho, double radioExplosion, double velocidadAtaque, EnumWeapons tipoArma, ImageIcon imagen) {
-        return factoryWeapons.FabricarWeapon(nombre, alcance, danho, velocidadAtaque, radioExplosion, tipoArma, imagen);
+    public aWeapon createBaseWeapon(String nombre, double alcance, double danho, int radioExplosion, double velocidadAtaque, EnumCharacters tipoArma, ImageIcon imagen
+    ,int cantidadAtaques) {
+        return factoryWeapons.FabricarWeapon(nombre, alcance, danho, radioExplosion, velocidadAtaque, tipoArma, imagen, cantidadAtaques);
     }
 
     //JSON
