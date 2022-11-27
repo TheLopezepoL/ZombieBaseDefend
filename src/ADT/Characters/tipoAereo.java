@@ -41,7 +41,7 @@ public class tipoAereo extends aTipo{
         System.out.println("Daño de armas: "+danho+"\t Daño total (habilidad doble): "+danho*2);
         enemigo.setVida(danho*2);
         if (enemigo.vida <= 0){
-            enemigo.setEstado(State.DEAD);
+            enemigo.setEstado(ADT.State.DEAD);
             //enemigo.updateImagen();
         }
         System.out.println("Daño total: "+danho*2+" Nueva vida: "+enemigo.vida);

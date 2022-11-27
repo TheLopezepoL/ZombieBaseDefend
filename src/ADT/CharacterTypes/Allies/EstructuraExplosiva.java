@@ -42,7 +42,7 @@ public class EstructuraExplosiva extends Estructura {
                 infoCharacter.addToBitacora("Daño total: " + danho + " Nueva vida: " + enemigo.getVida());
                 if (enemigo.getVida() <= 0) {
                     enemigo.addToBitacora("He sido asesinado!");
-                    enemigo.setEstado(State.DEAD);
+                    enemigo.setEstado(ADT.State.DEAD);
                     //enemigo.updateImagen();
                 }
             }
@@ -50,7 +50,7 @@ public class EstructuraExplosiva extends Estructura {
         if (hasAttacked) {
             infoCharacter.addToBitacora("Mi proposito ha sido cumplido! Hasta nunca!");
             infoCharacter.setVida((int) infoCharacter.getVida());
-            infoCharacter.setEstado(State.DEAD);
+            infoCharacter.setEstado(ADT.State.DEAD);
             //infoCharacter.updateImagen();
         }
         return 0;

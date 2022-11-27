@@ -38,7 +38,7 @@ public class Zombie extends aTipo {
             infoCharacter.addToBitacora("Daño total: " + danho + " Nueva vida: " + enemigo.getVida());
             if (enemigo.getVida() <= 0) {
                 enemigo.addToBitacora("He sido asesinado!");
-                enemigo.setEstado(State.DEAD);
+                enemigo.setEstado(ADT.State.DEAD);
                 //enemigo.updateImagen();
             }
         }

@@ -45,7 +45,7 @@ public class CreateWeapon extends JDialog {
         builderCharacter = new Character.BuilderCharacter();
 
 
-        cbTipo.setModel(new DefaultComboBoxModel<>(EnumWeapons.values()));
+        cbTipo.setModel(new DefaultComboBoxModel<>(EnumCharacters.values()));
 
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -77,7 +77,7 @@ public class CreateWeapon extends JDialog {
                         .addWeapon(arma)
                         .build();
 
-                if (arma != null) {
+                if (nuevoCharacter != null) {
                     MainController.controlador.getBaseCharacters().add(nuevoCharacter);
                     JOptionPane.showMessageDialog(null, "Success");
                 } else {

@@ -3,9 +3,10 @@ package ADT.CharacterTypes.Allies;
 import ADT.Characters.Character;
 import ADT.Characters.aTipo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Estructura extends aTipo {
+public class Estructura extends aTipo implements Serializable {
 
 
     @Override

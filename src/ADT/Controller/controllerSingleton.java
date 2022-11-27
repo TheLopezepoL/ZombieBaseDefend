@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.io.*;
 import java.nio.file.*;
+
 import ADT.Characters.Character;
 import ADT.Characters.TypesFactory;
 import ADT.Enums.EnumCharacters;
@@ -18,6 +19,7 @@ import ADT.Weapon.aWeapon;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -41,7 +43,9 @@ public class controllerSingleton {
     Path currentRelativePath = Paths.get("");
     String stringRelativePathSerializables = currentRelativePath.toAbsolutePath().toString().concat("\\Serializables");
 
-    private Character[][] tablero = {{null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}};
+    private Character[][] tablero = {{null, null, null, null, null}, {null, null, null, null, null},
+            {null, null, null, null, null}, {null, null, null, null, null},
+            {null, null, null, null, null}};
 
 
     //constructor privado
@@ -87,10 +91,6 @@ public class controllerSingleton {
         this.mainCharacter = main;
     }
 
-    public boolean addToTablero(Character pj) {
-        this.tablero[pj.getPosX()][pj.getPosY()] = pj;
-        return true;
-    }
 
     public aWeapon getArmaDefault() {
         return armaDefault;
@@ -118,9 +118,6 @@ public class controllerSingleton {
         return factoryTypes;
     }
 
-    public Character[][] getTablero() {
-        return tablero;
-    }
 
     public ArrayList<aWeapon> getBaseWeapons() {
         return base_weapons;
@@ -132,11 +129,6 @@ public class controllerSingleton {
 
     public java.util.ArrayList<Character> getGeneratedCharacters() {
         return generated_characters;
-    }
-
-    public void refreshMatriz(Character pj, int oldX, int oldY) {
-        tablero[oldX][oldY] = null;
-        tablero[pj.getPosX()][pj.getPosY()] = pj;
     }
 
     //Personajes posibles
@@ -222,7 +214,7 @@ public class controllerSingleton {
         return null;
     }
 
-    public void setEstructuras(ArrayList<Character> armas){
+    public void setEstructuras(ArrayList<Character> armas) {
         this.base_characters = armas;
     }
 
@@ -237,7 +229,7 @@ public class controllerSingleton {
 
     //CREAR ARMAS---------------------------------------
     public aWeapon createBaseWeapon(String nombre, double alcance, double danho, int radioExplosion, double velocidadAtaque, EnumCharacters tipoArma, ImageIcon imagen
-    ,int cantidadAtaques) {
+            , int cantidadAtaques) {
         return factoryWeapons.FabricarWeapon(nombre, alcance, danho, radioExplosion, velocidadAtaque, tipoArma, imagen, cantidadAtaques);
     }
 
@@ -343,9 +335,7 @@ public class controllerSingleton {
             }
             FileInputStream fis = new FileInputStream(fileSerializble);
             ObjectInputStream ois = new ObjectInputStream(fis);
-
             personajes = (ArrayList) ois.readObject();
-
             ois.close();
             fis.close();
         } catch (IOException ioe) {
@@ -356,15 +346,32 @@ public class controllerSingleton {
             c.printStackTrace();
             return;
         }
-
         for (Character personaje : personajes) {
-            if (personaje.getIsEnemigo()){
+            if (personaje.getIsEnemigo()) {
                 getEnemigos().add(personaje);
-            }
-            else {
+            } else {
                 getBaseCharacters().add(personaje);
             }
         }
+        return;
+    }
 
+    //FUNCIONES TABLERO
+
+    public boolean addToTablero(Character pj) {
+        if (this.tablero[pj.getPosX()][pj.getPosY()] != null ){
+            return false;
+        }
+        this.tablero[pj.getPosX()][pj.getPosY()] = pj;
+        return true;
+    }
+
+    public Character[][] getTablero() {
+        return tablero;
+    }
+
+    public void refreshMatriz (Character pj, int oldX, int oldY){
+        tablero[oldX][oldY] = null;
+        tablero[pj.getPosX()][pj.getPosY()] = pj;
     }
 }

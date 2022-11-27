@@ -155,6 +155,7 @@ public class Character implements IPrototype<Character>, Serializable {
 
         public BuilderCharacter addWeapon (aWeapon arma){
             //clone arma
+            this.armas.clear();
             this.armas.add(arma);
             return this;
         }
