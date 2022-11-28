@@ -3,7 +3,6 @@ package UI;
 import ADT.Characters.Character;
 import ADT.Controller.MainController;
 import ADT.Enums.EnumCharacters;
-import ADT.Enums.EnumWeapons;
 import ADT.State;
 import ADT.Weapon.aWeapon;
 
@@ -13,7 +12,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Objects;
 
 
 public class CreateWeapon extends JDialog {

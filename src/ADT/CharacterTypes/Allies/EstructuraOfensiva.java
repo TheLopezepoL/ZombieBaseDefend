@@ -2,7 +2,6 @@ package ADT.CharacterTypes.Allies;
 
 import ADT.CharacterTypes.Zombies.ZombieAereo;
 import ADT.Characters.Character;
-import ADT.State;
 import ADT.Weapon.aWeapon;
 
 import java.util.ArrayList;

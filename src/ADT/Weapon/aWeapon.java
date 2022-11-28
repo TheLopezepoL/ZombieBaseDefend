@@ -1,27 +1,23 @@
 package ADT.Weapon;
 
-import ADT.Characters.Character;
-import ADT.Controller.controllerSingleton;
 import ADT.IPrototype;
-import ADT.State;
 
 import javax.swing.*;
-import java.awt.Image;
 import java.io.Serializable;
 
 public abstract class aWeapon implements IPrototype<aWeapon>, Serializable {
-        public String nombre;
-        public double alcance;
-        public double danho;
-        public double velocidadDeAtaque;
-        public String tipo;
-        public boolean activo;
-        public ImageIcon imagen;
+    public String nombre;
+    public double alcance;
+    public double danho;
+    public double velocidadDeAtaque;
+    public String tipo;
+    public boolean activo;
+    public ImageIcon imagen;
 
 
-        //Para cuando hagamos clone, pasarle la imagen directamente
-        public aWeapon(String nombre, double alcance, double danho,
-                       double velocidadDeAtaque,String tipo,ImageIcon imagen) {
+    //Para cuando hagamos clone, pasarle la imagen directamente
+    public aWeapon(String nombre, double alcance, double danho,
+                   double velocidadDeAtaque, String tipo, ImageIcon imagen) {
         this.nombre = nombre;
         this.alcance = alcance;
         this.danho = danho;
@@ -29,7 +25,7 @@ public abstract class aWeapon implements IPrototype<aWeapon>, Serializable {
         this.activo = true;
         this.tipo = tipo;
         this.imagen = imagen;
-        }
+    }
 //
 //        public Image getImagen(){
 //            String url = controllerSingleton.getController().datosArma(this.nombre,this.nivel);
@@ -42,17 +38,19 @@ public abstract class aWeapon implements IPrototype<aWeapon>, Serializable {
 //            this.imagen = controllerSingleton.getController().getImage(url);
 //        }
 
-        public aWeapon() {
-        }
+    public aWeapon() {
+    }
 
     public String getNombre() {
         return nombre;
     }
 
     @Override
-        public abstract aWeapon clone();
-        @Override
-        public abstract aWeapon deepClone();
-        public abstract double utilizar();
+    public abstract aWeapon clone();
 
-    }
+    @Override
+    public abstract aWeapon deepClone();
+
+    public abstract double utilizar();
+
+}

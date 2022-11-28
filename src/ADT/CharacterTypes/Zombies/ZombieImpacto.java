@@ -1,12 +1,11 @@
 package ADT.CharacterTypes.Zombies;
 
 import ADT.Characters.Character;
-import ADT.State;
 import ADT.Weapon.aWeapon;
 
 import java.util.ArrayList;
 
-public class ZombieImpacto extends Zombie{
+public class ZombieImpacto extends Zombie {
     @Override
     public int atacar(Character infoCharacter, ArrayList<Character> enemigos) {
         boolean hasAttacked = false;
