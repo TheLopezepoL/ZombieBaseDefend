@@ -59,7 +59,7 @@ public class Menu extends JDialog{
                 }
                 else{
                     dispose();
-                    //CharacterSelection seleccion = new CharacterSelection(null);
+                    Tablero tablero = new Tablero();
                 }
 
                 }

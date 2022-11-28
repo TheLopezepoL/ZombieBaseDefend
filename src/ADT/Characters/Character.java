@@ -185,9 +185,6 @@ public class Character implements IPrototype<Character>, Serializable {
         public Character build(){
             return new Character(nombre, vida, nivel, campos, nivelAparicion, costo, armas,tipo,estado,imagen, posX,posY, esEnemigo);
         }
-
-
-
     }
 
 }

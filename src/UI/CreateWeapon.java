@@ -62,6 +62,11 @@ public class CreateWeapon extends JDialog {
                 int cantAtaques = (Integer) spinner_ataques.getValue();
                 ImageIcon imageIcon = new ImageIcon(selectedPathFile);
 
+                if(MainController.controlador.getCharacterByNombre(name) != null){
+                    JOptionPane.showMessageDialog(null, "Ya existe un personaje con este nombre");
+                    return;
+                }
+
                 aWeapon arma = MainController.controlador.createBaseWeapon(name,alcance,danho,radio,velocidad, tipo,imageIcon, cantAtaques);
 
                 Character nuevoCharacter = builderCharacter.setName(name)

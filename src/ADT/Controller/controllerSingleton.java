@@ -12,8 +12,10 @@ import java.nio.file.*;
 
 import ADT.Characters.Character;
 import ADT.Characters.TypesFactory;
+import ADT.Characters.aTipo;
 import ADT.Enums.EnumCharacters;
 import ADT.State;
+import ADT.Weapon.GunWeapon;
 import ADT.Weapon.WeaponFactory;
 import ADT.Weapon.aWeapon;
 import org.json.simple.JSONObject;
@@ -42,11 +44,8 @@ public class controllerSingleton {
     private static JSONParser parserArmas;
     Path currentRelativePath = Paths.get("");
     String stringRelativePathSerializables = currentRelativePath.toAbsolutePath().toString().concat("\\Serializables");
-
-    private Character[][] tablero = {{null, null, null, null, null}, {null, null, null, null, null},
-            {null, null, null, null, null}, {null, null, null, null, null},
-            {null, null, null, null, null}};
-
+    private Character[][] tablero;
+    int capacidadPersonajes;
 
     //constructor privado
     private controllerSingleton() {
@@ -59,7 +58,15 @@ public class controllerSingleton {
         factoryTypes = new TypesFactory();
         //JSON
         parser = new JSONParser();
+        tablero = new Character[25][25];
         parserArmas = new JSONParser();
+        capacidadPersonajes = 20;
+        aTipo tipo = factoryTypes.createType(EnumCharacters.ESTRUCTURA_BLOQUE);
+        ArrayList<aWeapon> arrayVacio = new ArrayList<>();
+        ImageIcon arbol = new ImageIcon(currentRelativePath.toAbsolutePath().toString().concat("\\src\\icons\\arbol.jpg"));
+        Character reliquia = new Character("Reliquia (Necesaria)",100.0,0,1,0,0,arrayVacio,tipo,State.DEFAULT,arbol,0,0,false);
+        base_characters.add(reliquia);
+
         try {
             Files.createDirectories(Paths.get(stringRelativePathSerializables));
         } catch (IOException e) {
@@ -90,8 +97,12 @@ public class controllerSingleton {
     public void setMainCharacter(Character main) {
         this.mainCharacter = main;
     }
-
-
+    public int getCapacidadPersonajes(){
+        return this.capacidadPersonajes;
+    }
+    public void setCapacidadPersonajes(int cantidad){
+        this.capacidadPersonajes = cantidad;
+    }
     public aWeapon getArmaDefault() {
         return armaDefault;
     }
@@ -350,7 +361,7 @@ public class controllerSingleton {
             if (personaje.getIsEnemigo()) {
                 getEnemigos().add(personaje);
             } else {
-                getBaseCharacters().add(personaje);
+                if(!personaje.getNombre().equals("Reliquia (Necesaria)")) getBaseCharacters().add(personaje);
             }
         }
         return;
