@@ -64,7 +64,7 @@ public class controllerSingleton {
         aTipo tipo = factoryTypes.createType(EnumCharacters.ESTRUCTURA_BLOQUE);
         ArrayList<aWeapon> arrayVacio = new ArrayList<>();
         ImageIcon arbol = new ImageIcon(currentRelativePath.toAbsolutePath().toString().concat("\\src\\icons\\arbol.jpg"));
-        Character reliquia = new Character("Reliquia (Necesaria)",100.0,0,1,0,0,arrayVacio,tipo,State.DEFAULT,arbol,0,0,false);
+        Character reliquia = new Character("Reliquia (Necesaria)",100.0,0,4,0,0,arrayVacio,tipo,State.DEFAULT,arbol,0,0,false);
         base_characters.add(reliquia);
 
         try {
@@ -106,7 +106,9 @@ public class controllerSingleton {
     public aWeapon getArmaDefault() {
         return armaDefault;
     }
-
+    public void setEnemigos(ArrayList<Character> enemigos){
+        this.enemigos = enemigos;
+    }
     public void setArmaDefault(aWeapon arma) {
         armaDefault = arma;
     }
@@ -128,7 +130,6 @@ public class controllerSingleton {
     public TypesFactory getFactoryTypes() {
         return factoryTypes;
     }
-
 
     public ArrayList<aWeapon> getBaseWeapons() {
         return base_weapons;
@@ -289,6 +290,13 @@ public class controllerSingleton {
         return url;
     }
 
+    public int[] getCostos() {
+        return getEnemigos().stream()
+                .mapToInt(Character::getCampos)
+                .toArray();
+    }
+
+
     public static Image getImage(String url) {
         BufferedImage imagen = null;
         try {
@@ -311,6 +319,11 @@ public class controllerSingleton {
 
     public Character getBaseCharacterByIndex(int index) {
         if (getBaseCharacters().size() > index) return getBaseCharacters().get(index);
+        return null;
+    }
+
+    public Character getEnemigoByIndex(int index) {
+        if (getEnemigos().size() > index) return getEnemigos().get(index);
         return null;
     }
 

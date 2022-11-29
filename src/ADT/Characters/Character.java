@@ -79,6 +79,9 @@ public class Character implements IPrototype<Character>, Serializable {
     public boolean getIsEnemigo(){return esEnemigo;}
     public int getNivel() {return nivel;}
     public int getCampos() {return campos;}
+    public void setIsEnemigo(boolean isEnemigo){
+        this.esEnemigo = isEnemigo;
+    }
     public int getNivelAparicion() {return nivelAparicion;}
     public int getCosto() {return costo;}
     public ArrayList<aWeapon> getArmas() {return armas;}

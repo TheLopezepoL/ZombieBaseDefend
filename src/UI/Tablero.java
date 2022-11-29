@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class Tablero extends JDialog {
     private JPanel Panel;
@@ -37,9 +38,7 @@ public class Tablero extends JDialog {
         setMinimumSize(new Dimension(1920, 1030));
         setLocationRelativeTo(parent);
         cargarTablero(parent);
-
-
-
+        colocarEnemigos();
 
         setVisible(true);
 
@@ -50,42 +49,13 @@ public class Tablero extends JDialog {
                 Character charAdded = MainController.controlador.getCharacterByNombre(nameCharAdded);
                 int posX = (int) spinnerPosX.getValue();
                 int posY = (int) spinnerPosY.getValue();
-
-                if (-1 > posX || posX > 24 || -1 > posY || posY > 24){
-                    JOptionPane.showMessageDialog(null, "La posición suministrada no es válida");
-                    return;
-                }
-
-
-                if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCosto() < 0)){
-                    JOptionPane.showMessageDialog(null, "Usted ya no cuenta con recursos para colocar personajes");
-                    return;
-                }
-                else{
-                    MainController.controlador.setCapacidadPersonajes(MainController.controlador.getCapacidadPersonajes()- charAdded.getCosto());
-                }
-
-                if(MainController.controlador.getTablero()[posX][posY] == null){
-                    if(nameCharAdded.equals("Reliquia (Necesaria)")){
-                        if (MainController.controlador.getMainCharacter() == null){
-                            MainController.controlador.setMainCharacter(charAdded);
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Solo se puede colocar una reliquia");
-                            return;
-                        }
-                    }
-                    charAdded.setPos(posX,posY);
-                    MainController.controlador.addToTablero(charAdded);
-                    MainController.controlador.getGeneratedCharacters().add(charAdded);
-                    cargarTablero(parent);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Este campo ya está ocupado");
+                if (placeCharacter(charAdded, posX, posY)) {
+                    MainController.controlador.setCapacidadPersonajes(MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos());
                 }
             }
         });
 
     }
-
 
 
     public void cargarTablero(JFrame window) {
@@ -101,7 +71,7 @@ public class Tablero extends JDialog {
                 if (tablero[botonX][botonY] != null) {
                     ImageIcon newimg = personaje.getImagen();
                     Image image = newimg.getImage(); // transform it
-                    Image newimg2 = image.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+                    Image newimg2 = image.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
                     ImageIcon imageIcon = new ImageIcon(newimg2);  // transform it back
                     botonesTablero[botonX][botonY].setIcon(imageIcon);
                 } else {
@@ -137,5 +107,70 @@ public class Tablero extends JDialog {
         }
         panelTablero.revalidate();
         panelTablero.repaint();
+    }
+
+    public void colocarEnemigos() {
+        MainController.controlador.setEnemigos(MainController.controlador.getBaseCharacters());
+        int capacidadEnemigos = MainController.controlador.getCapacidadPersonajes();
+        int[] costos = MainController.controlador.getCostos();
+        Random rand = new Random();
+        int random;
+        int randX;
+        int randY;
+        while (getMinValue(costos) <= capacidadEnemigos) {
+            random = rand.nextInt(costos.length);
+            randX = rand.nextInt(MainController.controlador.getTablero().length);
+            randY = rand.nextInt(MainController.controlador.getTablero()[0].length);
+            Character charAdded = MainController.controlador.getEnemigoByIndex(random).deepClone();
+            charAdded.setIsEnemigo(true);
+            if (placeCharacter(charAdded,randX,randY)){
+                capacidadEnemigos = capacidadEnemigos - charAdded.getCampos();
+            }
+            else return;
+        }
+    }
+
+    private static int getMinValue(int[] array) {
+        int minValue = array[0];
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] < minValue) {
+                minValue = array[i];
+            }
+        }
+        return minValue;
+    }
+
+    public boolean placeCharacter(Character charAdded, int posX, int posY) {
+        if (-1 > posX || posX > 24 || -1 > posY || posY > 24) {
+            if (!charAdded.getIsEnemigo()) JOptionPane.showMessageDialog(null, "La posición suministrada no es válida");
+            return false;
+        }
+
+
+        if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos() < 0)) {
+            if (!charAdded.getIsEnemigo())
+                JOptionPane.showMessageDialog(null, "Recursos insuficientes para colocar este personaje");
+            return false;
+        }
+
+        if (MainController.controlador.getTablero()[posX][posY] == null) {
+            if (charAdded.getNombre().equals("Reliquia (Necesaria)") && !charAdded.getIsEnemigo()) {
+                if (MainController.controlador.getMainCharacter() == null) {
+                    MainController.controlador.setMainCharacter(charAdded);
+                } else {
+                    if (!charAdded.getIsEnemigo())
+                        JOptionPane.showMessageDialog(null, "Solo se puede colocar una reliquia");
+                    return false;
+                }
+            }
+            charAdded.setPos(posX, posY);
+            MainController.controlador.addToTablero(charAdded);
+            MainController.controlador.getGeneratedCharacters().add(charAdded);
+            cargarTablero(parent);
+        } else {
+            if (!charAdded.getIsEnemigo()) JOptionPane.showMessageDialog(null, "Este campo ya está ocupado");
+            return false;
+        }
+        return true;
     }
 }
