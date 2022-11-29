@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Character implements IPrototype<Character>, Serializable {
+public class Character implements IPrototype<Character>, Runnable, Serializable {
     protected String nombre;
     protected double vida;
     protected int nivel;
@@ -47,6 +47,24 @@ public class Character implements IPrototype<Character>, Serializable {
         this.imagen = imagen;
         this.bitacora = "";
         this.esEnemigo = esEnemigo;
+    }
+
+    //Thread
+
+    @Override
+    public void run() {
+        while (true){
+            ArrayList<Character> enemies = this.getTipo().getDistanceRelic(this);
+            if (enemies.isEmpty()){
+                moveToRelic(this);
+            }
+            else this.getTipo().atacar(this,enemies);
+            try {
+                Thread.sleep((int) (getArmas().get(0).velocidadDeAtaque*1000));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     //PROTOTYPE-------------------------------------------------------------------------------------------------------
@@ -156,6 +174,44 @@ public class Character implements IPrototype<Character>, Serializable {
         this.costo += (int) (this.costo * porcentaje);
         for (aWeapon arma : this.armas)
             arma.subirEstadisticas(porcentaje);
+    }
+
+    public void moveToRelic(Character character){
+        Character reliquia = MainController.controlador.getMainCharacter();
+        int diferenciaX = reliquia.getPosX() - character.getPosX();
+        int diferenciaY = reliquia.getPosY() - character.getPosY();
+        String resultado;
+
+        if(diferenciaX > 0 && diferenciaY == 0){
+            getTipo().moverse(character, character.getPosX() + 1, character.getPosY());
+        }
+        else if(diferenciaX < 0 && diferenciaY == 0){
+            getTipo().moverse(character,character.getPosX()-1,character.getPosY());
+        }
+        else if(diferenciaX == 0 && diferenciaY > 0){
+            getTipo().moverse(character,character.getPosX(),character.getPosY()+1);
+            //return Direction.DOWN;
+        }
+        else if(diferenciaX == 0 && diferenciaY < 0){
+            getTipo().moverse(character,character.getPosX(),character.getPosY()-1);
+        }
+        else if(diferenciaX > 0 && diferenciaY > 0){
+            //return Direction.DOWN_RIGHT;
+            getTipo().moverse(character,character.getPosX()+1,character.getPosY()+1);
+        }
+        else if(diferenciaX < 0 && diferenciaY > 0){
+            getTipo().moverse(character,character.getPosX()-1,character.getPosY()+1);
+            //return Direction.DOWN_LEFT;
+        }
+        else if(diferenciaX > 0 && diferenciaY < 0){
+            //return Direction.UP_RIGHT;
+            getTipo().moverse(character,character.getPosX()+1,character.getPosY()-1);
+        }
+        else if(diferenciaX < 0 && diferenciaY < 0){
+            getTipo().moverse(character,character.getPosX()-1,character.getPosY()-1);
+            //return Direction.UP_LEFT;
+        }
+        //return Direction.DEFAULT;
     }
 
 

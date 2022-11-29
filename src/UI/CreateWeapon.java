@@ -42,8 +42,10 @@ public class CreateWeapon extends JDialog {
         setLocationRelativeTo(parent);
         builderCharacter = new Character.BuilderCharacter();
 
+        EnumCharacters[] enumCharacters = {EnumCharacters.ESTRUCTURA_BLOQUE, EnumCharacters.ESTRUCTURA_AEREO, EnumCharacters.ESTRUCTURA_CONTACTO, EnumCharacters.ESTRUCTURA_IMPACTO
+        , EnumCharacters.ESTRUCTURA_ATAQUE_MULTIPLE, EnumCharacters.ESTRUCTURA_MEDIO_ALCANCE};
 
-        cbTipo.setModel(new DefaultComboBoxModel<>(EnumCharacters.values()));
+        cbTipo.setModel(new DefaultComboBoxModel<>(enumCharacters));
 
         createButton.addActionListener(new ActionListener() {
             @Override

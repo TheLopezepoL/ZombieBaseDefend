@@ -2,11 +2,14 @@ package ADT.CharacterTypes.Zombies;
 
 import ADT.Characters.Character;
 import ADT.Characters.aTipo;
+import ADT.Controller.MainController;
 import ADT.Weapon.aWeapon;
+import UI.Tablero;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Zombie extends aTipo {
+public class Zombie extends aTipo implements Serializable, Runnable {
     @Override
     public int atacar(Character infoCharacter, ArrayList<Character> enemigos) {
         for (Character enemigo : enemigos) {
@@ -47,8 +50,41 @@ public class Zombie extends aTipo {
 
     @Override
     public boolean moverse(Character infoCharacter, int x, int y) {
-        infoCharacter.setPos(x, y);
-        infoCharacter.addToBitacora("Me muevo a las coordenadas -> (" + x + ", " + y + ").");
+        String resultado = MainController.controlador.placeCharacter(infoCharacter,x,y);
+        if (resultado.equals("correcto")) infoCharacter.addToBitacora("Me muevo a las coordenadas -> (" + x + ", " + y + ").");
         return true;
     }
+
+    public ArrayList<Character> getDistanceZombies(Character atacker){
+        ArrayList<Character> result = new ArrayList<>();
+        for (Character enemy : MainController.controlador.getGeneratedCharacters()){
+            if (!enemy.getIsEnemigo()){
+                double distancia = Math.sqrt((atacker.getPosY() - enemy.getPosY()) * (atacker.getPosY() - enemy.getPosY()) + (enemy.getPosX() - atacker.getPosX()) * (enemy.getPosX() - atacker.getPosX()));
+                if (distancia <= atacker.getArmas().get(0).alcance){
+                    result.add(enemy);
+                }
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Character> getDistanceRelic(Character atacker){
+        ArrayList<Character> result = new ArrayList<>();
+        for (Character enemy : MainController.controlador.getGeneratedCharacters()){
+            if (!enemy.getIsEnemigo()){
+                double distancia = Math.sqrt((atacker.getPosY() - enemy.getPosY()) * (atacker.getPosY() - enemy.getPosY()) + (enemy.getPosX() - atacker.getPosX()) * (enemy.getPosX() - atacker.getPosX()));
+                if (distancia <= atacker.getArmas().get(0).alcance){
+                    result.add(enemy);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void run() {
+
+    }
+
+
 }

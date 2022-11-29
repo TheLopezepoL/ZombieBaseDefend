@@ -7,14 +7,9 @@ import ADT.Enums.EnumCharacters;
 import ADT.State;
 import ADT.Weapon.WeaponFactory;
 import ADT.Weapon.aWeapon;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import UI.Tablero;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,8 +20,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class controllerSingleton {
     private static controllerSingleton myController; //static reference to the single object
     //IMAGENES
-    private static JSONParser parser;
-    private static JSONParser parserArmas;
     Path currentRelativePath = Paths.get("");
     String stringRelativePathSerializables = currentRelativePath.toAbsolutePath().toString().concat("\\Serializables");
     int capacidadPersonajes;
@@ -52,10 +45,7 @@ public class controllerSingleton {
         //FACTORY
         factoryWeapons = new WeaponFactory();
         factoryTypes = new TypesFactory();
-        //JSON
-        parser = new JSONParser();
         tablero = new Character[25][25];
-        parserArmas = new JSONParser();
         capacidadPersonajes = 20;
         aTipo tipo = factoryTypes.createType(EnumCharacters.ESTRUCTURA_BLOQUE);
         ArrayList<aWeapon> arrayVacio = new ArrayList<>();
@@ -78,65 +68,6 @@ public class controllerSingleton {
         return myController;
     }
 
-    //JSON
-    public static String datos(String pNombre, int pNivel, State pEstado) {
-
-        JSONParser jsonParser = parser;
-        FileReader lector = null;
-        try {
-            lector = new FileReader(".\\src\\ImagenesPersonaje.json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject lista = null;
-        try {
-
-            lista = (JSONObject) jsonParser.parse(lector);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject personaje = (JSONObject) lista.get(pNombre);
-        JSONObject nivel = (JSONObject) personaje.get(Integer.toString(pNivel));
-        String url = nivel.get(pEstado.name()).toString();
-        return url;
-    }
-
-    public static String datosArma(String pNombre, int pNivel) {
-
-        JSONParser jsonParser = parserArmas;
-        JSONObject lista = null;
-        try {
-
-            lista = (JSONObject) jsonParser.parse(new FileReader(".\\src\\ImagenesArma.json"));
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject arma = (JSONObject) lista.get(pNombre);
-        String url = arma.get(Integer.toString(pNivel)).toString();
-
-        return url;
-    }
-
-    public static Image getImage(String url) {
-        BufferedImage imagen = null;
-        try {
-            //Image es clase abstracta de java, podemos retornar bufferedImage
-            //y ponerlo en atributo Image de personaje / arma
-            imagen = ImageIO.read(new File(url));
-
-
-        } catch (IOException e) {
-            System.out.println("Imagen no encontrada, revisar formato");
-
-        }
-        return imagen;
-    }
 
     public Character getMainCharacter() {
         return mainCharacter;
@@ -146,13 +77,6 @@ public class controllerSingleton {
         this.mainCharacter = main;
     }
 
-    public Boolean getTurno() {
-        return turno;
-    }
-
-    public void setTurno(Boolean act) {
-        this.turno = act;
-    }
 
     public int getCapacidadPersonajes() {
         return this.capacidadPersonajes;
@@ -162,27 +86,12 @@ public class controllerSingleton {
         this.capacidadPersonajes = cantidad;
     }
 
-    public aWeapon getArmaDefault() {
-        return armaDefault;
-    }
-    public void setEnemigos(ArrayList<Character> enemigos){
-        this.enemigos = enemigos;
-    }
-    public void setArmaDefault(aWeapon arma) {
-        armaDefault = arma;
-    }
-
     public void addEnemy(Character pj) {
         this.enemigos.add(pj);
     }
 
     public ArrayList<Character> getEnemigos() {
         return enemigos;
-    }
-
-    //get Weapons Factory
-    public WeaponFactory getFactoryWeapons() {
-        return factoryWeapons;
     }
 
     //get Types Factory
@@ -202,91 +111,7 @@ public class controllerSingleton {
         return generated_characters;
     }
 
-    //print Armas
 
-    //Personajes posibles
-    public ArrayList<String> personajesJSON() {
-
-        JSONParser jsonParser = parser;
-        FileReader lector;
-        try {
-            lector = new FileReader(".\\src\\ImagenesPersonaje.json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject lista;
-        try {
-
-            lista = (JSONObject) jsonParser.parse(lector);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        ArrayList<String> nombres = new ArrayList<>(lista.keySet());
-        return nombres;
-    }
-
-    public ArrayList<String> nivelesJSON(String nombre) {
-
-        JSONParser jsonParser = parser;
-        FileReader lector;
-        try {
-            lector = new FileReader(".\\src\\ImagenesPersonaje.json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject lista;
-        try {
-
-            lista = (JSONObject) jsonParser.parse(lector);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject personaje = (JSONObject) lista.get(nombre);
-        ArrayList<String> niveles = new ArrayList<>(personaje.keySet());
-        return niveles;
-    }
-
-    //Armas posibles
-    public ArrayList<String> armasJSON() {
-
-        JSONParser jsonParser = parser;
-        FileReader lector;
-        try {
-            lector = new FileReader(".\\src\\ImagenesArma.json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject lista;
-        try {
-
-            lista = (JSONObject) jsonParser.parse(lector);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        ArrayList<String> nombres = new ArrayList<>(lista.keySet());
-        return nombres;
-    }
-
-    public aWeapon getArmaByNombre(String nombreArma) {
-        for (aWeapon arma : getBaseWeapons()) {
-            if (arma.getNombre().equals(nombreArma)) {
-                return arma.clone();
-            }
-        }
-        return null;
-    }
-
-    public void setEstructuras(ArrayList<Character> armas) {
-        this.base_characters = armas;
-    }
 
     public Character getCharacterByNombre(String nombrePersonaje) {
         for (Character personaje : getBaseCharacters()) {
@@ -410,8 +235,37 @@ public class controllerSingleton {
         return tablero;
     }
 
-    public void refreshMatriz(Character pj, int oldX, int oldY) {
-        tablero[oldX][oldY] = null;
-        tablero[pj.getPosX()][pj.getPosY()] = pj;
+    public String placeCharacter(Character charAdded, int posX, int posY) {
+        if (-1 > posX || posX > 24 || -1 > posY || posY > 24) {
+            return "Posicionamiento fuera de la cuadrícula, por favor inténtelo de  nuevo";
+        }
+
+
+        if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos() < 0)) {
+            return "Usted no cuenta con los campos suficientes para colocar este personaje";
+        }
+
+        if (MainController.controlador.getTablero()[posX][posY] == null) {
+            if (charAdded.getNombre().equals("Reliquia (Necesaria)")) {
+                if (MainController.controlador.getMainCharacter() == null) {
+                    MainController.controlador.setMainCharacter(charAdded);
+                } else {
+                    return "Solo se puede colocar una reliquia";
+                }
+            }
+
+            if(!MainController.controlador.getGeneratedCharacters().contains(charAdded))
+                MainController.controlador.getGeneratedCharacters().add(charAdded);
+                getTablero()[charAdded.getPosX()][charAdded.getPosY()] = null;
+            charAdded.setPos(posX, posY);
+            MainController.controlador.addToTablero(charAdded);
+            return "correcto";
+        } else {
+            return "Esta celda ya se encuentra ocupada";
+
+        }
+
     }
+
+
 }

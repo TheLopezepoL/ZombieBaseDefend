@@ -1,7 +1,9 @@
 package ADT.CharacterTypes.Allies;
 
 import ADT.Characters.Character;
+import ADT.Controller.MainController;
 import ADT.Weapon.aWeapon;
+import UI.Tablero;
 
 import java.util.ArrayList;
 
@@ -45,8 +47,10 @@ public class EstructuraAerea extends Estructura {
 
     @Override
     public boolean moverse(Character infoCharacter, int x, int y) {
-        infoCharacter.setPos(x, y);
-        infoCharacter.addToBitacora("Me muevo a las coordenadas -> (" + x + ", " + y + ").");
+        String resultado = MainController.controlador.placeCharacter(infoCharacter,x,y);
+        if (resultado.equals("correcto")) infoCharacter.addToBitacora("Me muevo a las coordenadas -> (" + x + ", " + y + ").");
         return true;
+
     }
+
 }
