@@ -73,6 +73,10 @@ public class Character implements IPrototype<Character>, Serializable {
         this.imagen = imagen;
     }
 
+    public void setIsEnemigo(boolean isEnemigo){
+        this.esEnemigo = isEnemigo;
+    }
+
     public String getNombre() {
         return nombre;
     }
