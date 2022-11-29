@@ -34,7 +34,7 @@ public class controllerSingleton {
     private final TypesFactory factoryTypes;
     private final ArrayList<Character> generated_characters;
     private Character mainCharacter;
-    private final ArrayList<Character> enemigos;
+    private ArrayList<Character> enemigos;
     private ArrayList<Character> base_characters;
     private final ArrayList<aWeapon> base_weapons;
     private aWeapon armaDefault;
@@ -295,6 +295,11 @@ public class controllerSingleton {
         return null;
     }
 
+    public int[] getCostos() {
+        return getEnemigos().stream()
+                .mapToInt(Character::getCampos)
+                .toArray();
+    }
     //CREAR ARMAS---------------------------------------
     public aWeapon createBaseWeapon(String nombre, double alcance, double danho, int radioExplosion, double velocidadAtaque, EnumCharacters tipoArma, ImageIcon imagen
             , int cantidadAtaques) {

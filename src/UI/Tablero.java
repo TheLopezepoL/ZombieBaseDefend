@@ -64,33 +64,27 @@ public class Tablero extends JDialog {
         Character[][] tablero = MainController.controlador.getTablero();
         botonesTablero = new JButton[tablero.length][tablero[0].length];
 
-        for (int botonX = 0; botonX < tablero.length; botonX++) {
-            for (int botonY = 0; botonY < tablero[0].length; botonY++) {
+        for (int botonY = 0; botonY < tablero.length; botonY++) {
+            for (int botonX = 0; botonX < tablero[0].length; botonX++) {
                 Character personaje = tablero[botonX][botonY];
-                botonesTablero[botonX][botonY] = new JButton("O");
+                botonesTablero[botonX][botonY] = new JButton();
                 if (tablero[botonX][botonY] != null) {
                     ImageIcon newimg = personaje.getImagen();
                     Image image = newimg.getImage(); // transform it
-                    Image newimg2 = image.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+                    Image newimg2 = image.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
                     ImageIcon imageIcon = new ImageIcon(newimg2);  // transform it back
                     botonesTablero[botonX][botonY].setIcon(imageIcon);
-                } else {
-                    botonesTablero[botonX][botonY].setForeground(Color.WHITE);
+                    if (personaje.getIsEnemigo())botonesTablero[botonX][botonY].setBackground(Color.red);
+                    else botonesTablero[botonX][botonY].setBackground(Color.blue);
                 }
-
+                botonesTablero[botonX][botonY].setPreferredSize((new Dimension(20, 20)));
                 botonesTablero[botonX][botonY].putClientProperty("x", botonX);
                 botonesTablero[botonX][botonY].putClientProperty("y", botonY);
                 botonesTablero[botonX][botonY].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Character mainPj = MainController.controlador.getMainCharacter();
-                        int oldX = mainPj.getPosX();
-                        int oldY = mainPj.getPosY();
                         int newX = (Integer) (((JButton) e.getSource()).getClientProperty("x"));
                         int newY = (Integer) (((JButton) e.getSource()).getClientProperty("y"));
-                        if (MainController.controlador.getMainCharacter().getTipo().moverse(mainPj, newX, newY)) {
-                            MainController.controlador.refreshMatriz(MainController.controlador.getMainCharacter(), oldX, oldY);
-                        }
 
                         cargarTablero(window);
                         window.invalidate();
