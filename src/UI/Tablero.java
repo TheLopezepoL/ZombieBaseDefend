@@ -2,6 +2,7 @@ package UI;
 
 import ADT.CharacterTypes.Allies.Estructura;
 import ADT.Characters.Character;
+import ADT.Controller.Jugando;
 import ADT.Controller.MainController;
 import ADT.State;
 import ADT.Weapon.aWeapon;
@@ -24,7 +25,7 @@ public class Tablero extends JDialog {
     private JButton buttonJugar;
 
     private JButton[][] botonesTablero;
-    JFrame parent = new JFrame();
+    public JFrame parent = new JFrame();
 
     public Tablero() {
         //super(parent);
@@ -41,6 +42,7 @@ public class Tablero extends JDialog {
         colocarEnemigos();
 
         setVisible(true);
+        Jugando jugando = new Jugando(this);
 
         buttonAddEstructura.addActionListener(new ActionListener() {
             @Override
@@ -49,9 +51,21 @@ public class Tablero extends JDialog {
                 Character charAdded = MainController.controlador.getCharacterByNombre(nameCharAdded);
                 int posX = (int) spinnerPosX.getValue();
                 int posY = (int) spinnerPosY.getValue();
-                if (placeCharacter(charAdded, posX, posY)) {
+                String resultado = MainController.controlador.placeCharacter(charAdded, posX, posY);
+                if (resultado.equals("correcto")) {
                     MainController.controlador.setCapacidadPersonajes(MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos());
+                    cargarTablero(parent);
+                } else {
+                    JOptionPane.showMessageDialog(null,resultado);
                 }
+            }
+        });
+
+        buttonJugar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                new Thread(jugando).start();
             }
         });
 
@@ -74,7 +88,7 @@ public class Tablero extends JDialog {
                     Image newimg2 = image.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
                     ImageIcon imageIcon = new ImageIcon(newimg2);  // transform it back
                     botonesTablero[botonX][botonY].setIcon(imageIcon);
-                    if (personaje.getIsEnemigo())botonesTablero[botonX][botonY].setBackground(Color.red);
+                    if (personaje.getIsEnemigo()) botonesTablero[botonX][botonY].setBackground(Color.red);
                     else botonesTablero[botonX][botonY].setBackground(Color.blue);
                 }
                 botonesTablero[botonX][botonY].setPreferredSize((new Dimension(20, 20)));
@@ -104,7 +118,6 @@ public class Tablero extends JDialog {
     }
 
     public void colocarEnemigos() {
-        MainController.controlador.setEnemigos(MainController.controlador.getBaseCharacters());
         int capacidadEnemigos = MainController.controlador.getCapacidadPersonajes();
         int[] costos = MainController.controlador.getCostos();
         Random rand = new Random();
@@ -116,15 +129,14 @@ public class Tablero extends JDialog {
             randX = rand.nextInt(MainController.controlador.getTablero().length);
             randY = rand.nextInt(MainController.controlador.getTablero()[0].length);
             Character charAdded = MainController.controlador.getEnemigoByIndex(random).deepClone();
-            charAdded.setIsEnemigo(true);
-            if (placeCharacter(charAdded,randX,randY)){
+            if (MainController.controlador.placeCharacter(charAdded, randX, randY).equals("correcto")) {
                 capacidadEnemigos = capacidadEnemigos - charAdded.getCampos();
-            }
-            else return;
+                cargarTablero(parent);
+            } else return;
         }
     }
 
-    private static int getMinValue(int[] array) {
+    private int getMinValue(int[] array) {
         int minValue = array[0];
         for (int i = 0; i < array.length; i++) {
             if (array[i] < minValue) {
@@ -134,37 +146,7 @@ public class Tablero extends JDialog {
         return minValue;
     }
 
-    public boolean placeCharacter(Character charAdded, int posX, int posY) {
-        if (-1 > posX || posX > 24 || -1 > posY || posY > 24) {
-            if (!charAdded.getIsEnemigo()) JOptionPane.showMessageDialog(null, "La posición suministrada no es válida");
-            return false;
-        }
 
 
-        if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos() < 0)) {
-            if (!charAdded.getIsEnemigo())
-                JOptionPane.showMessageDialog(null, "Recursos insuficientes para colocar este personaje");
-            return false;
-        }
 
-        if (MainController.controlador.getTablero()[posX][posY] == null) {
-            if (charAdded.getNombre().equals("Reliquia (Necesaria)") && !charAdded.getIsEnemigo()) {
-                if (MainController.controlador.getMainCharacter() == null) {
-                    MainController.controlador.setMainCharacter(charAdded);
-                } else {
-                    if (!charAdded.getIsEnemigo())
-                        JOptionPane.showMessageDialog(null, "Solo se puede colocar una reliquia");
-                    return false;
-                }
-            }
-            charAdded.setPos(posX, posY);
-            MainController.controlador.addToTablero(charAdded);
-            MainController.controlador.getGeneratedCharacters().add(charAdded);
-            cargarTablero(parent);
-        } else {
-            if (!charAdded.getIsEnemigo()) JOptionPane.showMessageDialog(null, "Este campo ya está ocupado");
-            return false;
-        }
-        return true;
-    }
 }

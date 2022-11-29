@@ -15,6 +15,7 @@ public class Menu extends JDialog{
     private JButton createCharacterButton;
     private JButton playButton;
     private JPanel menuPanel;
+    public Tablero tablero;
 
     public Menu(JFrame parent){
         super(parent);
@@ -39,7 +40,7 @@ public class Menu extends JDialog{
         createCharacterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //CreateCharacter createCharacter = new CreateCharacter(null);
+                CreateZombie createZombie = new CreateZombie(null);
             }
 
 
@@ -59,7 +60,7 @@ public class Menu extends JDialog{
                 }
                 else{
                     dispose();
-                    Tablero tablero = new Tablero();
+                    tablero = new Tablero();
                 }
 
                 }
@@ -70,4 +71,5 @@ public class Menu extends JDialog{
 
 
     }
+
 }

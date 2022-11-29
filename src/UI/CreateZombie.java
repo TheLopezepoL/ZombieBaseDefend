@@ -71,7 +71,7 @@ public class CreateZombie extends JDialog {
                         .setVida(vida)
                         .setNivel(nivel)
                         .setCosto(0)
-                        .setEsEnemigo(false)
+                        .setEsEnemigo(true)
                         .setCampos(campos)
                         .setNivelAparicion(nivel)
                         .setEstado(State.DEFAULT)
@@ -81,7 +81,7 @@ public class CreateZombie extends JDialog {
                         .build();
 
                 if (nuevoCharacter != null) {
-                    MainController.controlador.getBaseCharacters().add(nuevoCharacter);
+                    MainController.controlador.addEnemy(nuevoCharacter);
                     JOptionPane.showMessageDialog(null, "Success");
                 } else {
                     JOptionPane.showMessageDialog(null, "Error");

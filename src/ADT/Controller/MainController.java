@@ -4,7 +4,6 @@ import UI.Menu;
 
 public class MainController {
     public static controllerSingleton controlador;
-    public static volatile Boolean jugando;
 
     public static void main(String[] args) {
 
