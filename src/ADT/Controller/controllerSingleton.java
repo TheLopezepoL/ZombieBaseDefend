@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class controllerSingleton {
     private static controllerSingleton myController; //static reference to the single object
@@ -32,14 +33,15 @@ public class controllerSingleton {
     //FACTORY----------------------------------
     private final WeaponFactory factoryWeapons;
     private final TypesFactory factoryTypes;
-    private final ArrayList<Character> generated_characters;
+    private ArrayList<Character> generated_characters;    // GUARDAR
     private Character mainCharacter;
-    private ArrayList<Character> enemigos;
-    private ArrayList<Character> base_characters;
-    private final ArrayList<aWeapon> base_weapons;
+    private ArrayList<Character> enemigos;  // GUADAR
+    private ArrayList<Character> base_characters;   // GUARDAR
+    private ArrayList<aWeapon> base_weapons;  // GUARDAR
     private aWeapon armaDefault;
-    private Boolean turno;
-    private final Character[][] tablero;
+    private Boolean turno;  // GUARDAR
+    private Character[][] tablero;    // GUARDAR
+    private int nivel;  // GUARDAR
 
     //constructor privado
     private controllerSingleton() {
@@ -370,6 +372,27 @@ public class controllerSingleton {
             } else {
                 if (!personaje.getNombre().equals("Reliquia (Necesaria)")) getBaseCharacters().add(personaje);
             }
+        }
+    }
+
+    public MementoController saveGame() {
+        return new MementoController(this.generated_characters, this.turno, this.tablero, this.nivel, this.enemigos, this.base_characters, this.base_weapons);
+    }
+
+    public void restoreGame(MementoController memento) {
+        this.generated_characters = memento.getGenerated_characters();
+        this.turno = memento.getTurno();
+        this.tablero = memento.getTablero();
+        this.nivel = memento.getNivel();
+        //this.enemigos = memento.getEnemigos();
+        //this.base_characters = memento.getBase_characters();
+        //this.base_weapons = memento.getBase_weapons();
+    }
+
+    public void subirNivel() {
+        for (Character character : this.generated_characters) {
+            double porcentaje = ThreadLocalRandom.current().nextDouble(5, 21) / 100;
+            character.subirEstadisticas(porcentaje);
         }
     }
 

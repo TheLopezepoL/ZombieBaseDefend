@@ -4,6 +4,7 @@ import ADT.IPrototype;
 
 import javax.swing.*;
 import java.io.Serializable;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class aWeapon implements IPrototype<aWeapon>, Serializable {
     public String nombre;
@@ -43,6 +44,10 @@ public abstract class aWeapon implements IPrototype<aWeapon>, Serializable {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public void subirEstadisticas(double porcentaje) {
+        this.danho += this.danho * porcentaje;
     }
 
     @Override

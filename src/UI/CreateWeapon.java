@@ -82,6 +82,7 @@ public class CreateWeapon extends JDialog {
 
                 if (nuevoCharacter != null) {
                     MainController.controlador.getBaseCharacters().add(nuevoCharacter);
+                    //MainController.controlador.addEnemy(nuevoCharacter);
                     JOptionPane.showMessageDialog(null, "Success");
                 } else {
                     JOptionPane.showMessageDialog(null, "Error");

@@ -150,6 +150,14 @@ public class Character implements IPrototype<Character>, Serializable {
         this.bitacora = this.bitacora + "\n" + evento;
     }
 
+    public void subirEstadisticas(double porcentaje) {
+        this.vida += this.vida * porcentaje;
+        this.nivel += 1;
+        this.costo += (int) (this.costo * porcentaje);
+        for (aWeapon arma : this.armas)
+            arma.subirEstadisticas(porcentaje);
+    }
+
 
     //CHARACTER BUILDER------------------------------------------------------------------------
     public static class BuilderCharacter implements IBuilder<Character> {
