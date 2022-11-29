@@ -7,13 +7,13 @@ public class ExplosiveWeapon extends aWeapon {
 
 
     public ExplosiveWeapon(String nombre, double alcance, double danho, int radioExplosion, double velocidadDeAtaque, ImageIcon Imagen) {
-        super(nombre, alcance, danho, velocidadDeAtaque,  "FUEGO", Imagen);
+        super(nombre, alcance, danho, velocidadDeAtaque, "FUEGO", Imagen);
         this.radioExplosion = radioExplosion;
     }
 
-    public ExplosiveWeapon(ExplosiveWeapon armaDeFuego){
+    public ExplosiveWeapon(ExplosiveWeapon armaDeFuego) {
         super(armaDeFuego.nombre, armaDeFuego.alcance, armaDeFuego.danho,
-                armaDeFuego.velocidadDeAtaque , "FUEGO", armaDeFuego.imagen);
+                armaDeFuego.velocidadDeAtaque, "FUEGO", armaDeFuego.imagen);
         this.radioExplosion = armaDeFuego.radioExplosion;
     }
 
@@ -26,12 +26,13 @@ public class ExplosiveWeapon extends aWeapon {
     }
 
 
-    public aWeapon clone(){
+    public aWeapon clone() {
         return new ExplosiveWeapon(this);
-    };
+    }
 
     @Override
-    public aWeapon deepClone(){
+    public aWeapon deepClone() {
         return clone();
-    };
+    }
+
 }

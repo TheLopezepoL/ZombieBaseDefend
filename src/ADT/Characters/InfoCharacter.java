@@ -10,29 +10,26 @@ public class InfoCharacter extends JDialog {
     private JLabel LblVida;
     private JPanel Panel;
     private JLabel LblNivel;
-    private JButton[][] botonesTablero;
+    private final JButton[][] botonesTablero;
 
-    public InfoCharacter(JFrame parent){
+    public InfoCharacter(JFrame parent) {
         super(parent);
         setTitle("Create Character");
         Panel.setLayout(new GridLayout(4, 4));
         setContentPane(Panel);
-        setMinimumSize(new Dimension(480,474));
+        setMinimumSize(new Dimension(480, 474));
         setModal(true);
         setLocationRelativeTo(parent);
 
-        Character [][] tablero = MainController.controlador.getTablero();
+        Character[][] tablero = MainController.controlador.getTablero();
         botonesTablero = new JButton[tablero.length][tablero[0].length];
 
-        for(int r = 0; r < tablero.length; r++)
-        {
-            for(int c = 0; c < tablero[0].length; c++)
-            {
+        for (int r = 0; r < tablero.length; r++) {
+            for (int c = 0; c < tablero[0].length; c++) {
                 botonesTablero[r][c] = new JButton("O");
-                if (tablero[r][c] != null){
+                if (tablero[r][c] != null) {
                     botonesTablero[r][c].setBackground(Color.BLACK);
-                }
-                else {
+                } else {
                     botonesTablero[r][c].setForeground(Color.WHITE);
                 }
                 //botonesTablero[r][c].addActionListener(new TileListener());

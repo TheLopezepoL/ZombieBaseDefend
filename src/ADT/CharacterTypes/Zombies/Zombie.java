@@ -2,7 +2,6 @@ package ADT.CharacterTypes.Zombies;
 
 import ADT.Characters.Character;
 import ADT.Characters.aTipo;
-import ADT.State;
 import ADT.Weapon.aWeapon;
 
 import java.util.ArrayList;

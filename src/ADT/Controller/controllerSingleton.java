@@ -1,21 +1,10 @@
 package ADT.Controller;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.io.*;
-import java.nio.file.*;
-
 import ADT.Characters.Character;
 import ADT.Characters.TypesFactory;
 import ADT.Characters.aTipo;
 import ADT.Enums.EnumCharacters;
 import ADT.State;
-import ADT.Weapon.GunWeapon;
 import ADT.Weapon.WeaponFactory;
 import ADT.Weapon.aWeapon;
 import org.json.simple.JSONObject;
@@ -24,28 +13,33 @@ import org.json.simple.parser.ParseException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class controllerSingleton {
     private static controllerSingleton myController; //static reference to the single object
-
-    //FACTORY----------------------------------
-    private WeaponFactory factoryWeapons;
-    private TypesFactory factoryTypes;
-
-    private ArrayList<Character> generated_characters;
-    private Character mainCharacter;
-    private ArrayList<Character> enemigos;
-    private ArrayList<Character> base_characters;
-    private ArrayList<aWeapon> base_weapons;
-    private aWeapon armaDefault;
-    private Boolean turno;
     //IMAGENES
     private static JSONParser parser;
     private static JSONParser parserArmas;
     Path currentRelativePath = Paths.get("");
     String stringRelativePathSerializables = currentRelativePath.toAbsolutePath().toString().concat("\\Serializables");
-    private Character[][] tablero;
     int capacidadPersonajes;
+    //FACTORY----------------------------------
+    private final WeaponFactory factoryWeapons;
+    private final TypesFactory factoryTypes;
+    private final ArrayList<Character> generated_characters;
+    private Character mainCharacter;
+    private final ArrayList<Character> enemigos;
+    private ArrayList<Character> base_characters;
+    private final ArrayList<aWeapon> base_weapons;
+    private aWeapon armaDefault;
+    private Boolean turno;
+    private final Character[][] tablero;
 
     //constructor privado
     private controllerSingleton() {
@@ -82,8 +76,72 @@ public class controllerSingleton {
         return myController;
     }
 
+    //JSON
+    public static String datos(String pNombre, int pNivel, State pEstado) {
+
+        JSONParser jsonParser = parser;
+        FileReader lector = null;
+        try {
+            lector = new FileReader(".\\src\\ImagenesPersonaje.json");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        JSONObject lista = null;
+        try {
+
+            lista = (JSONObject) jsonParser.parse(lector);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        JSONObject personaje = (JSONObject) lista.get(pNombre);
+        JSONObject nivel = (JSONObject) personaje.get(Integer.toString(pNivel));
+        String url = nivel.get(pEstado.name()).toString();
+        return url;
+    }
+
+    public static String datosArma(String pNombre, int pNivel) {
+
+        JSONParser jsonParser = parserArmas;
+        JSONObject lista = null;
+        try {
+
+            lista = (JSONObject) jsonParser.parse(new FileReader(".\\src\\ImagenesArma.json"));
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        JSONObject arma = (JSONObject) lista.get(pNombre);
+        String url = arma.get(Integer.toString(pNivel)).toString();
+
+        return url;
+    }
+
+    public static Image getImage(String url) {
+        BufferedImage imagen = null;
+        try {
+            //Image es clase abstracta de java, podemos retornar bufferedImage
+            //y ponerlo en atributo Image de personaje / arma
+            imagen = ImageIO.read(new File(url));
+
+
+        } catch (IOException e) {
+            System.out.println("Imagen no encontrada, revisar formato");
+
+        }
+        return imagen;
+    }
+
     public Character getMainCharacter() {
         return mainCharacter;
+    }
+
+    public void setMainCharacter(Character main) {
+        this.mainCharacter = main;
     }
 
     public Boolean getTurno() {
@@ -94,15 +152,14 @@ public class controllerSingleton {
         this.turno = act;
     }
 
-    public void setMainCharacter(Character main) {
-        this.mainCharacter = main;
-    }
-    public int getCapacidadPersonajes(){
+    public int getCapacidadPersonajes() {
         return this.capacidadPersonajes;
     }
-    public void setCapacidadPersonajes(int cantidad){
+
+    public void setCapacidadPersonajes(int cantidad) {
         this.capacidadPersonajes = cantidad;
     }
+
     public aWeapon getArmaDefault() {
         return armaDefault;
     }
@@ -142,6 +199,8 @@ public class controllerSingleton {
     public java.util.ArrayList<Character> getGeneratedCharacters() {
         return generated_characters;
     }
+
+    //print Armas
 
     //Personajes posibles
     public ArrayList<String> personajesJSON() {
@@ -214,9 +273,6 @@ public class controllerSingleton {
         return nombres;
     }
 
-    //print Armas
-
-
     public aWeapon getArmaByNombre(String nombreArma) {
         for (aWeapon arma : getBaseWeapons()) {
             if (arma.getNombre().equals(nombreArma)) {
@@ -243,73 +299,6 @@ public class controllerSingleton {
     public aWeapon createBaseWeapon(String nombre, double alcance, double danho, int radioExplosion, double velocidadAtaque, EnumCharacters tipoArma, ImageIcon imagen
             , int cantidadAtaques) {
         return factoryWeapons.FabricarWeapon(nombre, alcance, danho, radioExplosion, velocidadAtaque, tipoArma, imagen, cantidadAtaques);
-    }
-
-    //JSON
-    public static String datos(String pNombre, int pNivel, State pEstado) {
-
-        JSONParser jsonParser = parser;
-        FileReader lector = null;
-        try {
-            lector = new FileReader(".\\src\\ImagenesPersonaje.json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject lista = null;
-        try {
-
-            lista = (JSONObject) jsonParser.parse(lector);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject personaje = (JSONObject) lista.get(pNombre);
-        JSONObject nivel = (JSONObject) personaje.get(Integer.toString(pNivel));
-        String url = nivel.get(pEstado.name()).toString();
-        return url;
-    }
-
-    public static String datosArma(String pNombre, int pNivel) {
-
-        JSONParser jsonParser = parserArmas;
-        JSONObject lista = null;
-        try {
-
-            lista = (JSONObject) jsonParser.parse(new FileReader(".\\src\\ImagenesArma.json"));
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        JSONObject arma = (JSONObject) lista.get(pNombre);
-        String url = arma.get(Integer.toString(pNivel)).toString();
-
-        return url;
-    }
-
-    public int[] getCostos() {
-        return getEnemigos().stream()
-                .mapToInt(Character::getCampos)
-                .toArray();
-    }
-
-
-    public static Image getImage(String url) {
-        BufferedImage imagen = null;
-        try {
-            //Image es clase abstracta de java, podemos retornar bufferedImage
-            //y ponerlo en atributo Image de personaje / arma
-            imagen = ImageIO.read(new File(url));
-
-
-        } catch (IOException e) {
-            System.out.println("Imagen no encontrada, revisar formato");
-
-        }
-        return imagen;
     }
 
     public Character getGeneratedCharacterByIndex(int index) {
@@ -374,16 +363,15 @@ public class controllerSingleton {
             if (personaje.getIsEnemigo()) {
                 getEnemigos().add(personaje);
             } else {
-                if(!personaje.getNombre().equals("Reliquia (Necesaria)")) getBaseCharacters().add(personaje);
+                if (!personaje.getNombre().equals("Reliquia (Necesaria)")) getBaseCharacters().add(personaje);
             }
         }
-        return;
     }
 
     //FUNCIONES TABLERO
 
     public boolean addToTablero(Character pj) {
-        if (this.tablero[pj.getPosX()][pj.getPosY()] != null ){
+        if (this.tablero[pj.getPosX()][pj.getPosY()] != null) {
             return false;
         }
         this.tablero[pj.getPosX()][pj.getPosY()] = pj;
@@ -394,7 +382,7 @@ public class controllerSingleton {
         return tablero;
     }
 
-    public void refreshMatriz (Character pj, int oldX, int oldY){
+    public void refreshMatriz(Character pj, int oldX, int oldY) {
         tablero[oldX][oldY] = null;
         tablero[pj.getPosX()][pj.getPosY()] = pj;
     }

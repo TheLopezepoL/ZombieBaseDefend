@@ -1,9 +1,8 @@
 package ADT.Weapon;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class BurstWeapon extends aWeapon{
+public class BurstWeapon extends aWeapon {
     int cantidadAtaques;
 
 
@@ -12,7 +11,7 @@ public class BurstWeapon extends aWeapon{
         this.cantidadAtaques = cantidadAtaques;
     }
 
-    public BurstWeapon(BurstWeapon armaDeFuego){
+    public BurstWeapon(BurstWeapon armaDeFuego) {
         super(armaDeFuego.nombre, armaDeFuego.alcance, armaDeFuego.danho,
                 armaDeFuego.velocidadDeAtaque, "FUEGO", armaDeFuego.imagen);
         this.cantidadAtaques = armaDeFuego.cantidadAtaques;
@@ -22,14 +21,14 @@ public class BurstWeapon extends aWeapon{
     }
 
     @Override
-    public aWeapon clone(){
+    public aWeapon clone() {
         return new BurstWeapon(this);
-    };
+    }
 
     @Override
-    public aWeapon deepClone(){
+    public aWeapon deepClone() {
         return clone();
-    };
+    }
 
     @Override
     public double utilizar() {

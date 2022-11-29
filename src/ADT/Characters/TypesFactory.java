@@ -11,7 +11,7 @@ import ADT.Enums.EnumCharacters;
 
 public class TypesFactory {
     //FACTORY METHOD
-    public aTipo createType (EnumCharacters tipo){
+    public aTipo createType(EnumCharacters tipo) {
         return switch (tipo) {
             case ESTRUCTURA_CONTACTO, ESTRUCTURA_MEDIO_ALCANCE, ESTRUCTURA_ATAQUE_MULTIPLE -> new EstructuraOfensiva();
             case ESTRUCTURA_AEREO -> new EstructuraAerea();
