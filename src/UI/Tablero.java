@@ -1,12 +1,8 @@
 package UI;
 
-import ADT.CharacterTypes.Allies.Estructura;
 import ADT.Characters.Character;
 import ADT.Controller.Jugando;
 import ADT.Controller.MainController;
-import ADT.State;
-import ADT.Weapon.aWeapon;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +19,7 @@ public class Tablero extends JDialog {
     private JSpinner spinnerPosY;
     private JButton buttonAddEstructura;
     private JButton buttonJugar;
+    private JButton guardarButton;
 
     private JButton[][] botonesTablero;
     public JFrame parent = new JFrame();
@@ -54,6 +51,8 @@ public class Tablero extends JDialog {
                 String resultado = MainController.controlador.placeCharacter(charAdded, posX, posY);
                 if (resultado.equals("correcto")) {
                     MainController.controlador.setCapacidadPersonajes(MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos());
+                    JOptionPane.showMessageDialog(null,"Colocado, usted tiene todavía "+String.valueOf(MainController.controlador.getCapacidad()+
+                            " campos disponibles"));
                     cargarTablero(parent);
                 } else {
                     JOptionPane.showMessageDialog(null,resultado);
@@ -66,6 +65,18 @@ public class Tablero extends JDialog {
             public void actionPerformed(ActionEvent e) {
 
                 new Thread(jugando).start();
+            }
+        });
+
+        guardarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (MainController.controlador.getNumeroPartida() == 0){
+                    int numeroPartida = MainController.controlador.getFileSupervisor().saveGame(MainController.controlador.getNivel(),0);
+                    MainController.controlador.setNumeroPartida(numeroPartida);
+                }
+
+                JOptionPane.showMessageDialog(null,"Juego guardado");
             }
         });
 

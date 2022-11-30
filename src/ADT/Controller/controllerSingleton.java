@@ -31,10 +31,11 @@ public class controllerSingleton {
     private ArrayList<Character> enemigos;  // GUADAR
     private ArrayList<Character> base_characters;   // GUARDAR
     private ArrayList<aWeapon> base_weapons;  // GUARDAR
-    private aWeapon armaDefault;
     private Boolean turno;  // GUARDAR
     private Character[][] tablero;    // GUARDAR
     private int nivel;  // GUARDAR
+    private int numeroPartida;
+    private fileSupervisor gameSaver;
 
     //constructor privado
     private controllerSingleton() {
@@ -47,10 +48,14 @@ public class controllerSingleton {
         factoryTypes = new TypesFactory();
         tablero = new Character[25][25];
         capacidadPersonajes = 20;
+        nivel = 1;
+        gameSaver = new fileSupervisor();
+        numeroPartida = 0;
+        //CREACION ARBOL RELIQUIA
         aTipo tipo = factoryTypes.createType(EnumCharacters.ESTRUCTURA_BLOQUE);
         ArrayList<aWeapon> arrayVacio = new ArrayList<>();
         ImageIcon arbol = new ImageIcon(currentRelativePath.toAbsolutePath().toString().concat("\\src\\icons\\arbol.jpg"));
-        Character reliquia = new Character("Reliquia (Necesaria)",100.0,0,4,0,0,arrayVacio,tipo,State.DEFAULT,arbol,0,0,false);
+        Character reliquia = new Character("Reliquia (Necesaria)", 100.0, 0, 4, 0, 0, arrayVacio, tipo, State.DEFAULT, arbol, 0, 0, false);
         base_characters.add(reliquia);
 
         try {
@@ -68,51 +73,44 @@ public class controllerSingleton {
         return myController;
     }
 
-
+    //GETTERS
+    public Character[][] getTablero() {
+        return tablero;
+    }
     public Character getMainCharacter() {
         return mainCharacter;
     }
-
-    public void setMainCharacter(Character main) {
-        this.mainCharacter = main;
-    }
-
-
+    public int getNivel(){return nivel;}
     public int getCapacidadPersonajes() {
         return this.capacidadPersonajes;
     }
-
-    public void setCapacidadPersonajes(int cantidad) {
-        this.capacidadPersonajes = cantidad;
-    }
-
-    public void addEnemy(Character pj) {
-        this.enemigos.add(pj);
-    }
-
     public ArrayList<Character> getEnemigos() {
         return enemigos;
     }
-
-    //get Types Factory
+    public ArrayList<Character> getEnemigosNivel() {
+        ArrayList<Character> resultado = new ArrayList<>();
+        for (Character enemigo:enemigos){
+            if (enemigo.getNivelAparicion()<=getNivel()){
+                resultado.add(enemigo);
+            }
+        }
+        return resultado;
+    }
     public TypesFactory getFactoryTypes() {
         return factoryTypes;
     }
-
-    public ArrayList<aWeapon> getBaseWeapons() {
-        return base_weapons;
+    public void setMainCharacter(Character main) {
+        this.mainCharacter = main;
     }
-
     public java.util.ArrayList<Character> getBaseCharacters() {
         return base_characters;
     }
-
     public java.util.ArrayList<Character> getGeneratedCharacters() {
         return generated_characters;
     }
-
-
-
+    public int getCapacidad() {
+        return capacidadPersonajes;
+    }
     public Character getCharacterByNombre(String nombrePersonaje) {
         for (Character personaje : getBaseCharacters()) {
             if (personaje.getNombre().equals(nombrePersonaje)) {
@@ -121,34 +119,45 @@ public class controllerSingleton {
         }
         return null;
     }
-
     public int[] getCostos() {
-        return getEnemigos().stream()
+        return getEnemigosNivel().stream()
                 .mapToInt(Character::getCampos)
                 .toArray();
     }
+    public Character getGeneratedCharacterByIndex(int index) {
+        if (getGeneratedCharacters().size() > index) return getGeneratedCharacters().get(index);
+        return null;
+    }
+    public Character getBaseCharacterByIndex(int index) {
+        if (getBaseCharacters().size() > index) return getBaseCharacters().get(index);
+        return null;
+    }
+    public Character getEnemigoByIndex(int index) {
+        if (getEnemigos().size() > index) return getEnemigos().get(index);
+        return null;
+    }
+    public fileSupervisor getFileSupervisor(){
+        return gameSaver;
+    }
+    public int getNumeroPartida(){
+        return numeroPartida;
+    }
+    //SETTERS
+    public void setCapacidadPersonajes(int cantidad) {
+        this.capacidadPersonajes = cantidad;
+    }
+    public void setNumeroPartida(int numeroPartida) {this.numeroPartida = numeroPartida;}
+
+    public void addEnemy(Character pj) {
+        this.enemigos.add(pj);
+    }
+
     //CREAR ARMAS---------------------------------------
     public aWeapon createBaseWeapon(String nombre, double alcance, double danho, int radioExplosion, double velocidadAtaque, EnumCharacters tipoArma, ImageIcon imagen
             , int cantidadAtaques) {
         return factoryWeapons.FabricarWeapon(nombre, alcance, danho, radioExplosion, velocidadAtaque, tipoArma, imagen, cantidadAtaques);
     }
-
-    public Character getGeneratedCharacterByIndex(int index) {
-        if (getGeneratedCharacters().size() > index) return getGeneratedCharacters().get(index);
-        return null;
-    }
-
-    public Character getBaseCharacterByIndex(int index) {
-        if (getBaseCharacters().size() > index) return getBaseCharacters().get(index);
-        return null;
-    }
-
-    public Character getEnemigoByIndex(int index) {
-        if (getEnemigos().size() > index) return getEnemigos().get(index);
-        return null;
-    }
-
-
+    //SERIALIZACION PERSONAJES
     public void serializarPersonajes() {
 
         Path pathSerializablePersonajes = Paths.get(stringRelativePathSerializables.concat("\\personajesSerializados.txt"));
@@ -166,7 +175,6 @@ public class controllerSingleton {
             ioe.printStackTrace();
         }
     }
-
 
     public void readCharacters() {
         ArrayList<Character> personajes = new ArrayList<>();
@@ -231,20 +239,16 @@ public class controllerSingleton {
         return true;
     }
 
-    public Character[][] getTablero() {
-        return tablero;
-    }
-
     public String placeCharacter(Character charAdded, int posX, int posY) {
         if (-1 > posX || posX > 24 || -1 > posY || posY > 24) {
             return "Posicionamiento fuera de la cuadrícula, por favor inténtelo de  nuevo";
         }
-
-
         if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos() < 0 && !charAdded.getIsEnemigo())) {
             return "Usted no cuenta con los campos suficientes para colocar este personaje";
         }
-
+        if(MainController.controlador.getNivel() < charAdded.getNivelAparicion()){
+            return "Esta estructura requiere jugar en el nivel "+String.valueOf(charAdded.getNivelAparicion())+", actualmente usted se encuentra en el nivel " +String.valueOf(MainController.controlador.getNivel());
+        }
         if (MainController.controlador.getTablero()[posX][posY] == null) {
             if (charAdded.getNombre().equals("Reliquia (Necesaria)")) {
                 if (MainController.controlador.getMainCharacter() == null) {
@@ -253,18 +257,15 @@ public class controllerSingleton {
                     return "Solo se puede colocar una reliquia";
                 }
             }
-
-            if(!MainController.controlador.getGeneratedCharacters().contains(charAdded))
+            if (!MainController.controlador.getGeneratedCharacters().contains(charAdded))
                 MainController.controlador.getGeneratedCharacters().add(charAdded);
-                getTablero()[charAdded.getPosX()][charAdded.getPosY()] = null;
+            getTablero()[charAdded.getPosX()][charAdded.getPosY()] = null;
             charAdded.setPos(posX, posY);
             MainController.controlador.addToTablero(charAdded);
             return "correcto";
         } else {
             return "Esta celda ya se encuentra ocupada";
-
         }
-
     }
 
 
