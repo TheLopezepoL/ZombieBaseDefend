@@ -110,6 +110,14 @@ public class Tablero extends JDialog {
                     botonesTablero[botonX][botonY].setIcon(imageIcon);
                     if (personaje.getIsEnemigo()) botonesTablero[botonX][botonY].setBackground(Color.red);
                     else botonesTablero[botonX][botonY].setBackground(Color.blue);
+                    int finalBotonX = botonX;
+                    int finalBotonY = botonY;
+                    botonesTablero[botonX][botonY].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            CharInfoVisualizer info = new CharInfoVisualizer(finalBotonX, finalBotonY,null);
+                        }
+                    });
                 }
                 botonesTablero[botonX][botonY].putClientProperty("x", botonX);
                 botonesTablero[botonX][botonY].putClientProperty("y", botonY);

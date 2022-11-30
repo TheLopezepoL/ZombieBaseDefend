@@ -170,6 +170,8 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
         this.bitacora = this.bitacora + "\n" + evento;
     }
 
+    public String getBitacora(){return this.bitacora;}
+
     public void subirEstadisticas(double porcentaje) {
         this.vida += this.vida * porcentaje;
         this.nivel += 1;

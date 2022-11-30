@@ -13,7 +13,6 @@ public class EstructuraAerea extends Estructura {
         for (Character enemigo : enemigos) {
             double vidaAnterior = enemigo.getVida();
             infoCharacter.addToBitacora("Ataca a " + enemigo.getNombre() + " Vida Anterior: " + vidaAnterior);
-            infoCharacter.addToBitacora("Personaje Terrestre: Habilidad ---");
 
             int danho = 0;
             double distancia = Math.sqrt((infoCharacter.getPosY() - enemigo.getPosY()) * (infoCharacter.getPosY() - enemigo.getPosY()) + (enemigo.getPosX() - infoCharacter.getPosX()) * (enemigo.getPosX() - infoCharacter.getPosX()));
