@@ -1,6 +1,5 @@
 package ADT.Weapon;
 
-import ADT.CharacterTypes.Allies.EstructuraOfensiva;
 import ADT.Characters.aTipo;
 import ADT.Enums.EnumCharacters;
 import ADT.IPrototype;

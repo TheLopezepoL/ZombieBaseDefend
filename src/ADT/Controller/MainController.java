@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class MainController {
     public static controllerSingleton controlador;
-    public static volatile Boolean jugando;
-    public static ArrayList<MementoController> savedGames;
 
     public static void main(String[] args) {
 

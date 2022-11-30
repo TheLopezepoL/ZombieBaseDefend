@@ -148,6 +148,12 @@ public class Tablero extends JDialog {
         int capacidadEnemigos = MainController.controlador.getCapacidadPersonajes();
         int[] costos = MainController.controlador.getCostos();
         ArrayList<Character> enemigosPosibles=MainController.controlador.getEnemigosNivel();
+        if (enemigosPosibles.isEmpty()){
+            JOptionPane.showMessageDialog(null,"No hay zombies jugables disponibles");
+            dispose();
+            Menu menu = new Menu(null);
+            return;
+        }
         Random rand = new Random();
         int random;
         int randX;

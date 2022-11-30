@@ -10,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Menu extends JDialog {
-    private JButton createWeaponButton;
-    private JButton createCharacterButton;
     private JButton playButton;
     private JPanel menuPanel;
     public Tablero tablero;
@@ -25,24 +23,6 @@ public class Menu extends JDialog {
         setLocationRelativeTo(parent);
         //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-
-        createWeaponButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CreateWeapon createWeapon = new CreateWeapon(null);
-            }
-
-
-        });
-
-        createCharacterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CreateZombie createZombie = new CreateZombie(null);
-            }
-
-
-        });
 
 
         playButton.addActionListener(new ActionListener() {

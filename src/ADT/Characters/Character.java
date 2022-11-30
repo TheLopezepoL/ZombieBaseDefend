@@ -53,7 +53,7 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()){
+        while (!Thread.currentThread().isInterrupted() && getVida() > 0){
             ArrayList<Character> enemies = this.getTipo().getDistanceEnemies(this);
             if (enemies.isEmpty()){
                 moveToRelic(this);
@@ -281,11 +281,7 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
             return this;
         }
 
-        public BuilderCharacter setTipo(EnumCharacters type) {
-            //clone arma
-            this.tipo = MainController.controlador.getFactoryTypes().createType(type);
-            return this;
-        }
+
 
         public BuilderCharacter setEstado(State estado) {
             this.estado = estado;

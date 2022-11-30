@@ -1,11 +1,6 @@
 package ADT.Controller;
 
 import ADT.Characters.Character;
-import ADT.Characters.TypesFactory;
-import ADT.Characters.aTipo;
-import ADT.Enums.EnumCharacters;
-import ADT.State;
-import ADT.Weapon.WeaponFactory;
 import ADT.Weapon.aWeapon;
 import UI.Tablero;
 
@@ -16,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class controllerSingleton {
@@ -25,14 +21,11 @@ public class controllerSingleton {
     String stringRelativePathSerializables = currentRelativePath.toAbsolutePath().toString().concat("\\Serializables");
     int capacidadPersonajes;
     //FACTORY----------------------------------
-    private final WeaponFactory factoryWeapons;
-    private final TypesFactory factoryTypes;
+
     private ArrayList<Character> generated_characters;    // GUARDAR
     private Character mainCharacter;
     private ArrayList<Character> enemigos;  // GUADAR
     private ArrayList<Character> base_characters;   // GUARDAR
-    private ArrayList<aWeapon> base_weapons;  // GUARDAR
-    private Boolean turno;  // GUARDAR
     private Character[][] tablero;    // GUARDAR
     private int nivel;  // GUARDAR
     private int numeroPartida;
@@ -43,21 +36,12 @@ public class controllerSingleton {
         generated_characters = new ArrayList<Character>();
         base_characters = new ArrayList<Character>();
         enemigos = new ArrayList<Character>();
-        base_weapons = new ArrayList<aWeapon>();
         //FACTORY
-        factoryWeapons = new WeaponFactory();
-        factoryTypes = new TypesFactory();
         tablero = new Character[25][25];
         capacidadPersonajes = 20;
         nivel = 1;
         gameSaver = new fileSupervisor();
         numeroPartida = 0;
-        //CREACION ARBOL RELIQUIA
-        aTipo tipo = factoryTypes.createType(EnumCharacters.ESTRUCTURA_BLOQUE);
-        ArrayList<aWeapon> arrayVacio = new ArrayList<>();
-        ImageIcon arbol = new ImageIcon(currentRelativePath.toAbsolutePath().toString().concat("\\src\\icons\\arbol.jpg"));
-        Character reliquia = new Character("Reliquia (Necesaria)", 100.0, 0, 0, 0, 0, arrayVacio, tipo, State.DEFAULT, arbol, 0, 0, false);
-        base_characters.add(reliquia);
 
         try {
             Files.createDirectories(Paths.get(stringRelativePathSerializables));
@@ -97,9 +81,6 @@ public class controllerSingleton {
         }
         return resultado;
     }
-    public TypesFactory getFactoryTypes() {
-        return factoryTypes;
-    }
     public void setMainCharacter(Character main) {
         this.mainCharacter = main;
     }
@@ -125,18 +106,6 @@ public class controllerSingleton {
                 .mapToInt(Character::getCampos)
                 .toArray();
     }
-    public Character getGeneratedCharacterByIndex(int index) {
-        if (getGeneratedCharacters().size() > index) return getGeneratedCharacters().get(index);
-        return null;
-    }
-    public Character getBaseCharacterByIndex(int index) {
-        if (getBaseCharacters().size() > index) return getBaseCharacters().get(index);
-        return null;
-    }
-    public Character getEnemigoByIndex(int index) {
-        if (getEnemigos().size() > index) return getEnemigos().get(index);
-        return null;
-    }
     public fileSupervisor getFileSupervisor(){
         return gameSaver;
     }
@@ -150,33 +119,9 @@ public class controllerSingleton {
     public void setNumeroPartida(int numeroPartida) {this.numeroPartida = numeroPartida;}
     public void setNivel(int nivel) {this.nivel = nivel;}
 
-    public void addEnemy(Character pj) {
-        this.enemigos.add(pj);
-    }
 
     //CREAR ARMAS---------------------------------------
-    public aWeapon createBaseWeapon(String nombre, double alcance, double danho, int radioExplosion, double velocidadAtaque, EnumCharacters tipoArma, ImageIcon imagen
-            , int cantidadAtaques) {
-        return factoryWeapons.FabricarWeapon(nombre, alcance, danho, radioExplosion, velocidadAtaque, tipoArma, imagen, cantidadAtaques);
-    }
     //SERIALIZACION PERSONAJES
-    public void serializarPersonajes() {
-
-        Path pathSerializablePersonajes = Paths.get(stringRelativePathSerializables.concat("\\personajesSerializados.txt"));
-        File fileSerializblePersonajes = new File(pathSerializablePersonajes.toString());
-        ArrayList<Character> personajes = new ArrayList<>();
-        personajes.addAll(getEnemigos());
-        personajes.addAll(getBaseCharacters());
-        try {
-            FileOutputStream fosEstrucutras = new FileOutputStream(fileSerializblePersonajes);
-            ObjectOutputStream oosPersonajes = new ObjectOutputStream(fosEstrucutras);
-            oosPersonajes.writeObject(personajes);
-            oosPersonajes.close();
-            fosEstrucutras.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
 
     public void readCharacters() {
         ArrayList<Character> personajes = new ArrayList<>();
@@ -205,27 +150,11 @@ public class controllerSingleton {
             if (personaje.getIsEnemigo()) {
                 getEnemigos().add(personaje);
             } else {
-                if (!personaje.getNombre().equals("Reliquia (Necesaria)")) getBaseCharacters().add(personaje);
+                getBaseCharacters().add(personaje);
             }
         }
     }
 
-    public MementoController saveGame() {
-        return new MementoController(this.generated_characters, this.turno, this.tablero, this.nivel, this.enemigos, this.base_characters, this.base_weapons);
-    }
-
-    public void restoreGame(MementoController memento) {
-        this.generated_characters = memento.getGenerated_characters();
-        this.turno = memento.getTurno();
-        this.tablero = memento.getTablero();
-        this.nivel = memento.getNivel();
-        //this.enemigos = memento.getEnemigos();
-        //this.base_characters = memento.getBase_characters();
-        //this.base_weapons = memento.getBase_weapons();
-    }
-
-    public void subirNivel() {
-    }
 
     //FUNCIONES TABLERO
 
@@ -289,10 +218,17 @@ public class controllerSingleton {
     }
 
     public void mejorarPersonajes(int diferenciaNivel){
+        Random random = new Random();
         for (int i = 0; i<=diferenciaNivel; i++){
+            for (Character character : getEnemigos()) {
+                int porcentaje = (random.nextInt(21 - 5) + 5);
+                float percentage = ((float) porcentaje) / 100;
+                character.subirEstadisticas(percentage);
+            }
             for (Character character : getBaseCharacters()) {
-                int porcentaje = ThreadLocalRandom.current().nextInt(5, 21) / 100;
-                character.subirEstadisticas(porcentaje);
+                int porcentaje = (random.nextInt(21 - 5) + 5);
+                float percentage = ((float) porcentaje) / 100;
+                character.subirEstadisticas(percentage);
             }
         }
     }

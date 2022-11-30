@@ -14,11 +14,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+
 public class controllerSingleton {
     private static controllerSingleton myController; //static reference to the single object
     //IMAGENES
     Path currentRelativePath = Paths.get("");
-    String stringRelativePathSerializables = currentRelativePath.toAbsolutePath().toString().concat("\\Serializables");
+    String stringRelativePathSerializables = "C:\\Users\\andre\\Documents\\GitHub\\ZombieBaseDefend".concat("\\Serializables");
+    int capacidadPersonajes;
     //FACTORY----------------------------------
     private final WeaponFactory factoryWeapons;
     private final TypesFactory factoryTypes;
@@ -26,6 +28,8 @@ public class controllerSingleton {
     private Character mainCharacter;
     private ArrayList<Character> enemigos;  // GUADAR
     private ArrayList<Character> base_characters;   // GUARDAR
+    private Character[][] tablero;    // GUARDAR
+    private int nivel;  // GUARDAR
 
     //constructor privado
     private controllerSingleton() {
@@ -35,10 +39,12 @@ public class controllerSingleton {
         //FACTORY
         factoryWeapons = new WeaponFactory();
         factoryTypes = new TypesFactory();
+        tablero = new Character[25][25];
+        capacidadPersonajes = 20;
         //CREACION ARBOL RELIQUIA
         aTipo tipo = factoryTypes.createType(EnumCharacters.ESTRUCTURA_BLOQUE);
         ArrayList<aWeapon> arrayVacio = new ArrayList<>();
-        ImageIcon arbol = new ImageIcon(currentRelativePath.toAbsolutePath().toString().concat("\\src\\icons\\arbol.jpg"));
+        ImageIcon arbol = new ImageIcon(currentRelativePath.toAbsolutePath().toString().concat("\\icons\\arbol.jpg"));
         Character reliquia = new Character("Reliquia (Necesaria)", 100.0, 0, 0, 0, 0, arrayVacio, tipo, State.DEFAULT, arbol, 0, 0, false);
         base_characters.add(reliquia);
 
@@ -58,8 +64,15 @@ public class controllerSingleton {
     }
 
     //GETTERS
+    public Character[][] getTablero() {
+        return tablero;
+    }
     public Character getMainCharacter() {
         return mainCharacter;
+    }
+    public int getNivel(){return nivel;}
+    public int getCapacidadPersonajes() {
+        return this.capacidadPersonajes;
     }
     public ArrayList<Character> getEnemigos() {
         return enemigos;
@@ -67,12 +80,16 @@ public class controllerSingleton {
     public TypesFactory getFactoryTypes() {
         return factoryTypes;
     }
+    public void setMainCharacter(Character main) {
+        this.mainCharacter = main;
+    }
     public java.util.ArrayList<Character> getBaseCharacters() {
         return base_characters;
     }
     public java.util.ArrayList<Character> getGeneratedCharacters() {
         return generated_characters;
     }
+
     public Character getCharacterByNombre(String nombrePersonaje) {
         for (Character personaje : getBaseCharacters()) {
             if (personaje.getNombre().equals(nombrePersonaje)) {
@@ -81,6 +98,7 @@ public class controllerSingleton {
         }
         return null;
     }
+    //SETTERS
 
     public void addEnemy(Character pj) {
         this.enemigos.add(pj);
@@ -137,8 +155,51 @@ public class controllerSingleton {
             if (personaje.getIsEnemigo()) {
                 getEnemigos().add(personaje);
             } else {
-                if (!personaje.getNombre().equals("Reliquia (Necesaria)")) getBaseCharacters().add(personaje);
+                if (MainController.controlador.getCharacterByNombre(personaje.getNombre())==null) getBaseCharacters().add(personaje);
             }
         }
     }
+
+
+    //FUNCIONES TABLERO
+
+    public boolean addToTablero(Character pj) {
+        if (this.tablero[pj.getPosX()][pj.getPosY()] != null) {
+            return false;
+        }
+        this.tablero[pj.getPosX()][pj.getPosY()] = pj;
+        return true;
+    }
+
+    public String placeCharacter(Character charAdded, int posX, int posY) {
+        if (-1 > posX || posX > 24 || -1 > posY || posY > 24) {
+            return "Posicionamiento fuera de la cuadrícula, por favor inténtelo de  nuevo";
+        }
+        if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos() < 0 && !charAdded.getIsEnemigo())) {
+            return "Usted no cuenta con los campos suficientes para colocar este personaje";
+        }
+        if(MainController.controlador.getNivel() < charAdded.getNivelAparicion()){
+            return "Esta estructura requiere jugar en el nivel "+String.valueOf(charAdded.getNivelAparicion())+", actualmente usted se encuentra en el nivel " +String.valueOf(MainController.controlador.getNivel());
+        }
+        if (MainController.controlador.getTablero()[posX][posY] == null) {
+            if (charAdded.getNombre().equals("Reliquia (Necesaria)")) {
+                if (MainController.controlador.getMainCharacter() == null) {
+                    MainController.controlador.setMainCharacter(charAdded);
+                } else {
+                    return "Solo se puede colocar una reliquia";
+                }
+            }
+            if (!MainController.controlador.getGeneratedCharacters().contains(charAdded))
+                MainController.controlador.getGeneratedCharacters().add(charAdded);
+            getTablero()[charAdded.getPosX()][charAdded.getPosY()] = null;
+            charAdded.setPos(posX, posY);
+            MainController.controlador.addToTablero(charAdded);
+            return "correcto";
+        } else {
+            return "Esta celda ya se encuentra ocupada";
+        }
+    }
+
+
+
 }

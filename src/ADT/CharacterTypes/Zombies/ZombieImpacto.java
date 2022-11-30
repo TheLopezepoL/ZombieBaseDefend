@@ -46,7 +46,7 @@ public class ZombieImpacto extends Zombie {
         }
         if (hasAttacked) {
             infoCharacter.addToBitacora("Mi proposito ha sido cumplido! Hasta nunca!");
-            infoCharacter.setVida((int) infoCharacter.getVida());
+            infoCharacter.setVida((int) infoCharacter.getVida()+1);
             infoCharacter.setEstado(ADT.State.DEAD);
             //infoCharacter.updateImagen();
         }

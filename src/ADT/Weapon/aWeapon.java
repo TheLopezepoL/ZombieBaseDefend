@@ -1,13 +1,11 @@
 package ADT.Weapon;
 
-import ADT.CharacterTypes.Allies.EstructuraOfensiva;
-import ADT.Characters.aTipo;
-import ADT.Enums.EnumCharacters;
+
 import ADT.IPrototype;
 
 import javax.swing.*;
 import java.io.Serializable;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 public abstract class aWeapon implements IPrototype<aWeapon>, Serializable {
     public String nombre;
