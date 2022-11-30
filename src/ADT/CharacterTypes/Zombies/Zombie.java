@@ -41,6 +41,7 @@ public class Zombie extends aTipo implements Serializable, Runnable {
             if (enemigo.getVida() <= 0) {
                 enemigo.addToBitacora("He sido asesinado!");
                 enemigo.setEstado(ADT.State.DEAD);
+                MainController.controlador.getTablero()[enemigo.getPosX()][enemigo.getPosY()] = null;
                 //enemigo.updateImagen();
             }
         }
@@ -55,25 +56,13 @@ public class Zombie extends aTipo implements Serializable, Runnable {
         return true;
     }
 
-    public ArrayList<Character> getDistanceZombies(Character atacker){
-        ArrayList<Character> result = new ArrayList<>();
-        for (Character enemy : MainController.controlador.getGeneratedCharacters()){
-            if (!enemy.getIsEnemigo()){
-                double distancia = Math.sqrt((atacker.getPosY() - enemy.getPosY()) * (atacker.getPosY() - enemy.getPosY()) + (enemy.getPosX() - atacker.getPosX()) * (enemy.getPosX() - atacker.getPosX()));
-                if (distancia <= atacker.getArmas().get(0).alcance){
-                    result.add(enemy);
-                }
-            }
-        }
-        return result;
-    }
 
-    public ArrayList<Character> getDistanceRelic(Character atacker){
+    public ArrayList<Character> getDistanceEnemies(Character atacker){
         ArrayList<Character> result = new ArrayList<>();
         for (Character enemy : MainController.controlador.getGeneratedCharacters()){
-            if (!enemy.getIsEnemigo()){
+            if (!enemy.getIsEnemigo() && enemy.getVida() > 0){
                 double distancia = Math.sqrt((atacker.getPosY() - enemy.getPosY()) * (atacker.getPosY() - enemy.getPosY()) + (enemy.getPosX() - atacker.getPosX()) * (enemy.getPosX() - atacker.getPosX()));
-                if (distancia <= atacker.getArmas().get(0).alcance){
+                if (Math.round(distancia) <= atacker.getArmas().get(0).alcance){
                     result.add(enemy);
                 }
             }

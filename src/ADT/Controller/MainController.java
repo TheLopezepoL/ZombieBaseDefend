@@ -20,7 +20,7 @@ public class MainController {
         Menu menu = new Menu(null);
     }
 
-    public static void addMemento(MementoController memento) {
+    /*public static void addMemento(MementoController memento) {
         // GUARDAR EN MEMORIA
         if (savedGames.size() > 10)
             savedGames.remove(0);
@@ -64,5 +64,5 @@ public class MainController {
             return;
         }
         savedGames.addAll(savedGamesTxt);
-    }
+    }*/
 }

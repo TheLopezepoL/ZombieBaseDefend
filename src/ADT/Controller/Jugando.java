@@ -6,9 +6,11 @@ import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class Jugando extends Thread {
     Tablero tablero;
+    CountDownLatch latch = new CountDownLatch(1);
     ArrayList<Thread> threads;
     public Jugando(Tablero tablero){
         this.tablero = tablero;
@@ -21,12 +23,11 @@ public class Jugando extends Thread {
             t.start();
             threads.add(t);
         }
-        Character alo = new Character();
 
         while (true){
             tablero.cargarTablero(tablero.parent);
             try {
-                Thread.sleep(200);
+                Thread.sleep(900);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

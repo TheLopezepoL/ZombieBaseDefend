@@ -44,6 +44,7 @@ public class CreateZombie extends JDialog {
         EnumCharacters[] enumCharacters = {EnumCharacters.ZOMBIE_CONTACTO, EnumCharacters.ZOMBIE_AEREO, EnumCharacters.ZOMBIE_MEDIO_ALCANCE, EnumCharacters.ZOMBIE_IMPACTO};
 
         cbTipo.setModel(new DefaultComboBoxModel<>(enumCharacters));
+        spAlcance.setValue(1);
 
         createButton.addActionListener(new ActionListener() {
             @Override

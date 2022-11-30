@@ -46,6 +46,7 @@ public class CreateWeapon extends JDialog {
         , EnumCharacters.ESTRUCTURA_ATAQUE_MULTIPLE, EnumCharacters.ESTRUCTURA_MEDIO_ALCANCE};
 
         cbTipo.setModel(new DefaultComboBoxModel<>(enumCharacters));
+        spAlcance.setValue(1);
 
         createButton.addActionListener(new ActionListener() {
             @Override

@@ -18,18 +18,19 @@ public class EstructuraAerea extends Estructura {
             int danho = 0;
             double distancia = Math.sqrt((infoCharacter.getPosY() - enemigo.getPosY()) * (infoCharacter.getPosY() - enemigo.getPosY()) + (enemigo.getPosX() - infoCharacter.getPosX()) * (enemigo.getPosX() - infoCharacter.getPosX()));
             int aux = (int) distancia;
+            if (!infoCharacter.getArmas().isEmpty()) {
+                for (aWeapon arma : infoCharacter.getArmas()) {
+                    if (arma.activo) {
+                        if (arma.alcance >= aux) {
+                            danho += arma.utilizar();
+                            infoCharacter.addToBitacora("\tArma: " + arma.nombre +
+                                    "\tTipo: " + arma.tipo +
+                                    "Alcance: " + arma.alcance + "\tDaño causado: " + arma.utilizar());
+                        } else {
+                            infoCharacter.addToBitacora("\tArma: " + arma.nombre + "\tAlcance: " + arma.alcance + "\tFuera de Alcance");
+                        }
 
-            for (aWeapon arma : infoCharacter.getArmas()) {
-                if (arma.activo) {
-                    if (arma.alcance >= aux) {
-                        danho += arma.utilizar();
-                        infoCharacter.addToBitacora("\tArma: " + arma.nombre +
-                                "\tTipo: " + arma.tipo +
-                                "Alcance: " + arma.alcance + "\tDaño causado: " + arma.utilizar());
-                    } else {
-                        infoCharacter.addToBitacora("\tArma: " + arma.nombre + "\tAlcance: " + arma.alcance + "\tFuera de Alcance");
                     }
-
                 }
 
             }
@@ -39,6 +40,7 @@ public class EstructuraAerea extends Estructura {
             if (enemigo.getVida() <= 0) {
                 enemigo.addToBitacora("He sido asesinado!");
                 enemigo.setEstado(ADT.State.DEAD);
+                MainController.controlador.getTablero()[enemigo.getPosX()][enemigo.getPosY()] = null;
                 //enemigo.updateImagen();
             }
         }
@@ -47,8 +49,9 @@ public class EstructuraAerea extends Estructura {
 
     @Override
     public boolean moverse(Character infoCharacter, int x, int y) {
-        String resultado = MainController.controlador.placeCharacter(infoCharacter,x,y);
-        if (resultado.equals("correcto")) infoCharacter.addToBitacora("Me muevo a las coordenadas -> (" + x + ", " + y + ").");
+        String resultado = MainController.controlador.placeCharacter(infoCharacter, x, y);
+        if (resultado.equals("correcto"))
+            infoCharacter.addToBitacora("Me muevo a las coordenadas -> (" + x + ", " + y + ").");
         return true;
 
     }

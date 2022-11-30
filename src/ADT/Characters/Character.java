@@ -54,12 +54,13 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
     @Override
     public void run() {
         while (true){
-            ArrayList<Character> enemies = this.getTipo().getDistanceRelic(this);
+            ArrayList<Character> enemies = this.getTipo().getDistanceEnemies(this);
             if (enemies.isEmpty()){
                 moveToRelic(this);
             }
             else this.getTipo().atacar(this,enemies);
             try {
+                if (!getArmas().isEmpty())
                 Thread.sleep((int) (getArmas().get(0).velocidadDeAtaque*1000));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

@@ -22,13 +22,15 @@ public class Estructura extends aTipo implements Serializable {
         return false;
     }
     @Override
-    public ArrayList<Character> getDistanceRelic(Character atacker){
+    public ArrayList<Character> getDistanceEnemies(Character atacker){
         ArrayList<Character> result = new ArrayList<>();
         for (Character enemy : MainController.controlador.getGeneratedCharacters()){
-            if (enemy.getIsEnemigo()){
+            if (enemy.getIsEnemigo() && enemy.getVida() > 0){
                 double distancia = Math.sqrt((atacker.getPosY() - enemy.getPosY()) * (atacker.getPosY() - enemy.getPosY()) + (enemy.getPosX() - atacker.getPosX()) * (enemy.getPosX() - atacker.getPosX()));
-                if (distancia <= atacker.getArmas().get(0).alcance){
-                    result.add(enemy);
+                if (!atacker.getArmas().isEmpty()) {
+                    if (Math.round(distancia) <= atacker.getArmas().get(0).alcance) {
+                        result.add(enemy);
+                    }
                 }
             }
         }

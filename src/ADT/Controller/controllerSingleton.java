@@ -241,7 +241,7 @@ public class controllerSingleton {
         }
 
 
-        if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos() < 0)) {
+        if ((MainController.controlador.getCapacidadPersonajes() - charAdded.getCampos() < 0 && !charAdded.getIsEnemigo())) {
             return "Usted no cuenta con los campos suficientes para colocar este personaje";
         }
 

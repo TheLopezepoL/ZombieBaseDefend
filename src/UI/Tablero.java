@@ -91,7 +91,6 @@ public class Tablero extends JDialog {
                     if (personaje.getIsEnemigo()) botonesTablero[botonX][botonY].setBackground(Color.red);
                     else botonesTablero[botonX][botonY].setBackground(Color.blue);
                 }
-                botonesTablero[botonX][botonY].setPreferredSize((new Dimension(20, 20)));
                 botonesTablero[botonX][botonY].putClientProperty("x", botonX);
                 botonesTablero[botonX][botonY].putClientProperty("y", botonY);
                 botonesTablero[botonX][botonY].addActionListener(new ActionListener() {

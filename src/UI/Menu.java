@@ -58,6 +58,9 @@ public class Menu extends JDialog{
                 if (MainController.controlador.getBaseCharacters().size() == 0){
                     JOptionPane.showMessageDialog(null, "Debe crear personaje antes de jugar");
                 }
+                if (MainController.controlador.getEnemigos().size() == 0){
+                    JOptionPane.showMessageDialog(null, "Debe crear zombies antes de jugar");
+                }
                 else{
                     dispose();
                     tablero = new Tablero();
