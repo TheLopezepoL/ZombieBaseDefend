@@ -49,7 +49,7 @@ public class controllerSingleton {
         factoryTypes = new TypesFactory();
         tablero = new Character[25][25];
         capacidadPersonajes = 20;
-        nivel = 15;
+        nivel = 1;
         gameSaver = new fileSupervisor();
         numeroPartida = 0;
         //CREACION ARBOL RELIQUIA
@@ -272,7 +272,7 @@ public class controllerSingleton {
     }
 
 //FLUJO DEL JUEGO
-    public void avanzarNivel(int nivel){
+    public Tablero avanzarNivel(int nivel){
         int nivelAntiguo = getNivel();
         int diferenciaNiveles = nivel - nivelAntiguo;
         setNivel(nivel);
@@ -280,11 +280,12 @@ public class controllerSingleton {
         getGeneratedCharacters().clear();
         setMainCharacter(null);
         setCapacidadPersonajes(20);
-        if (diferenciaNiveles != 0){
+        if (diferenciaNiveles != 0 || (nivel == nivelAntiguo && nivel != 1)){
             setCapacidadPersonajes(getCapacidad()+(5*(nivel-1)));
             mejorarPersonajes(diferenciaNiveles);
         }
         Tablero tablero = new Tablero();
+        return tablero;
     }
 
     public void mejorarPersonajes(int diferenciaNivel){

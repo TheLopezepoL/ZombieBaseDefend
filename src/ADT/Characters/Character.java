@@ -61,7 +61,7 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
             else this.getTipo().atacar(this,enemies);
             try {
                 if (!getArmas().isEmpty())
-                Thread.sleep((int) (getArmas().get(0).velocidadDeAtaque*1000));
+                Thread.sleep((int) (getArmas().get(0).velocidadDeAtaque*1500));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;

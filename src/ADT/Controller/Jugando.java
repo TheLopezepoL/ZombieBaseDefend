@@ -24,12 +24,12 @@ public class Jugando extends Thread {
         }
 
         while (jugando){
+            cleanMuertos();
             tablero.cargarTablero(tablero.parent);
             if(verificarGane()){
                 for(Thread threadPersonaje:threads){
                     threadPersonaje.interrupt();
                 }
-                jugando = false;
                 int result = JOptionPane.showConfirmDialog(null,"Usted ha ganado! Desea avanzar al nivel "+(MainController.controlador.getNivel()+1)+ "?", "Felicidades!",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
@@ -64,10 +64,9 @@ public class Jugando extends Thread {
                 for(Thread threadPersonaje:threads){
                     threadPersonaje.interrupt();
                 }
-                jugando = false;
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(650);
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -90,6 +89,14 @@ public class Jugando extends Thread {
             return true;
         }
         return false;
+    }
+
+    private void cleanMuertos(){
+        for(Character character: MainController.controlador.getGeneratedCharacters()){
+            if (character.getVida() <= 0 || character.getEstado() == ADT.State.DEAD){
+                MainController.controlador.getTablero()[character.getPosX()][character.getPosY()] = null;
+            }
+        }
     }
 
 

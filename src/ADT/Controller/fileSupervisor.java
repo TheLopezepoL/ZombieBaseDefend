@@ -38,12 +38,16 @@ public class fileSupervisor {
     }
 
     public int[] loadGame(String fileName){
-        String pathDocumento = stringRelativePathGames.concat(fileName);
-        Pattern pattern = Pattern.compile("PartidaNumero(.*?)_Nivel");
+        String pathDocumento = stringRelativePathGames.concat("\\"+fileName);
+        String patternString = "PartidaNumero(.*)_Nivel";
+        int numeroPartida = 0;
+        Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(fileName);
+        while (matcher.find()){
+            numeroPartida = Integer.parseInt(matcher.group(1));
+        }
         Object result = null;
         int[] finalResult = new int[2];
-        int numeroPartida = Integer.parseInt(matcher.group(1));
         try (FileInputStream fis = new FileInputStream(pathDocumento);
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             result = ois.readObject();

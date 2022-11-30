@@ -22,7 +22,7 @@ public class ExplosiveWeapon extends aWeapon {
 
     @Override
     public double utilizar() {
-        return -danho;
+        return danho;
     }
 
 

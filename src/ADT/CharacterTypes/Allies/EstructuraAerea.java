@@ -40,7 +40,7 @@ public class EstructuraAerea extends Estructura {
             if (enemigo.getVida() <= 0) {
                 enemigo.addToBitacora("He sido asesinado!");
                 enemigo.setEstado(ADT.State.DEAD);
-                MainController.controlador.getTablero()[enemigo.getPosX()][enemigo.getPosY()] = null;
+
                 //enemigo.updateImagen();
             }
         }

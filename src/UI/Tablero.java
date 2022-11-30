@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Tablero extends JDialog {
@@ -80,6 +81,9 @@ public class Tablero extends JDialog {
                     int numeroPartida = MainController.controlador.getFileSupervisor().saveGame(MainController.controlador.getNivel(),0);
                     MainController.controlador.setNumeroPartida(numeroPartida);
                 }
+                else{
+                    int numeroPartida = MainController.controlador.getFileSupervisor().saveGame(MainController.controlador.getNivel(),MainController.controlador.getNumeroPartida());
+                }
 
                 JOptionPane.showMessageDialog(null,"Juego guardado");
             }
@@ -135,6 +139,7 @@ public class Tablero extends JDialog {
     public void colocarEnemigos() {
         int capacidadEnemigos = MainController.controlador.getCapacidadPersonajes();
         int[] costos = MainController.controlador.getCostos();
+        ArrayList<Character> enemigosPosibles=MainController.controlador.getEnemigosNivel();
         Random rand = new Random();
         int random;
         int randX;
@@ -143,7 +148,7 @@ public class Tablero extends JDialog {
             random = rand.nextInt(costos.length);
             randX = rand.nextInt(MainController.controlador.getTablero().length);
             randY = rand.nextInt(MainController.controlador.getTablero()[0].length);
-            Character charAdded = MainController.controlador.getEnemigoByIndex(random).deepClone();
+            Character charAdded = enemigosPosibles.get(random).deepClone();
             if (MainController.controlador.placeCharacter(charAdded, randX, randY).equals("correcto")) {
                 capacidadEnemigos = capacidadEnemigos - charAdded.getCampos();
             }
