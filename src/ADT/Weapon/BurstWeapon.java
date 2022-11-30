@@ -7,13 +7,13 @@ public class BurstWeapon extends aWeapon {
 
 
     public BurstWeapon(String nombre, double alcance, double danho, double velocidadDeAtaque, ImageIcon Imagen, int cantidadAtaques) {
-        super(nombre, alcance, danho, velocidadDeAtaque, "FUEGO", Imagen);
+        super(nombre, alcance, danho, velocidadDeAtaque, "RAFAGA", Imagen);
         this.cantidadAtaques = cantidadAtaques;
     }
 
     public BurstWeapon(BurstWeapon armaDeFuego) {
         super(armaDeFuego.nombre, armaDeFuego.alcance, armaDeFuego.danho,
-                armaDeFuego.velocidadDeAtaque, "FUEGO", armaDeFuego.imagen);
+                armaDeFuego.velocidadDeAtaque, "RAFAGA", armaDeFuego.imagen);
         this.cantidadAtaques = armaDeFuego.cantidadAtaques;
     }
 

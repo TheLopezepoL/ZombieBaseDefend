@@ -53,7 +53,7 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
 
     @Override
     public void run() {
-        while (true){
+        while (!Thread.currentThread().isInterrupted()){
             ArrayList<Character> enemies = this.getTipo().getDistanceEnemies(this);
             if (enemies.isEmpty()){
                 moveToRelic(this);
@@ -63,7 +63,8 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
                 if (!getArmas().isEmpty())
                 Thread.sleep((int) (getArmas().get(0).velocidadDeAtaque*1000));
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.currentThread().interrupt();
+                return;
             }
         }
     }
@@ -172,7 +173,6 @@ public class Character implements IPrototype<Character>, Runnable, Serializable 
     public void subirEstadisticas(double porcentaje) {
         this.vida += this.vida * porcentaje;
         this.nivel += 1;
-        this.costo += (int) (this.costo * porcentaje);
         for (aWeapon arma : this.armas)
             arma.subirEstadisticas(porcentaje);
     }

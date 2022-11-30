@@ -63,8 +63,13 @@ public class Tablero extends JDialog {
         buttonJugar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (MainController.controlador.getMainCharacter() == null) {
+                    JOptionPane.showMessageDialog(null,"Se debe colocar la reliquia antes jugar");
+                }else
                 new Thread(jugando).start();
+
+
+
             }
         });
 
@@ -141,9 +146,9 @@ public class Tablero extends JDialog {
             Character charAdded = MainController.controlador.getEnemigoByIndex(random).deepClone();
             if (MainController.controlador.placeCharacter(charAdded, randX, randY).equals("correcto")) {
                 capacidadEnemigos = capacidadEnemigos - charAdded.getCampos();
-                cargarTablero(parent);
-            } else return;
+            }
         }
+        cargarTablero(parent);
     }
 
     private int getMinValue(int[] array) {

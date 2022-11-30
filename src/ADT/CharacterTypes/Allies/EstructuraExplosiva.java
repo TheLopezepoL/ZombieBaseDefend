@@ -48,7 +48,7 @@ public class EstructuraExplosiva extends Estructura {
         }
         if (hasAttacked) {
             infoCharacter.addToBitacora("Mi proposito ha sido cumplido! Hasta nunca!");
-            infoCharacter.setVida((int) infoCharacter.getVida());
+            infoCharacter.setVida(-1);
             infoCharacter.setEstado(ADT.State.DEAD);
             //infoCharacter.updateImagen();
         }

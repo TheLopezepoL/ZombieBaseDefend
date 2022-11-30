@@ -1,5 +1,8 @@
 package ADT.Weapon;
 
+import ADT.CharacterTypes.Allies.EstructuraOfensiva;
+import ADT.Characters.aTipo;
+import ADT.Enums.EnumCharacters;
 import ADT.IPrototype;
 
 import javax.swing.*;
@@ -48,6 +51,9 @@ public abstract class aWeapon implements IPrototype<aWeapon>, Serializable {
 
     public void subirEstadisticas(double porcentaje) {
         this.danho += this.danho * porcentaje;
+        if (this.tipo == "FUEGO" && this.alcance > 1){
+            this.alcance++;
+        }
     }
 
     @Override

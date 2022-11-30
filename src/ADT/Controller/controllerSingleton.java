@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class controllerSingleton {
@@ -48,14 +49,14 @@ public class controllerSingleton {
         factoryTypes = new TypesFactory();
         tablero = new Character[25][25];
         capacidadPersonajes = 20;
-        nivel = 1;
+        nivel = 15;
         gameSaver = new fileSupervisor();
         numeroPartida = 0;
         //CREACION ARBOL RELIQUIA
         aTipo tipo = factoryTypes.createType(EnumCharacters.ESTRUCTURA_BLOQUE);
         ArrayList<aWeapon> arrayVacio = new ArrayList<>();
         ImageIcon arbol = new ImageIcon(currentRelativePath.toAbsolutePath().toString().concat("\\src\\icons\\arbol.jpg"));
-        Character reliquia = new Character("Reliquia (Necesaria)", 100.0, 0, 4, 0, 0, arrayVacio, tipo, State.DEFAULT, arbol, 0, 0, false);
+        Character reliquia = new Character("Reliquia (Necesaria)", 100.0, 0, 0, 0, 0, arrayVacio, tipo, State.DEFAULT, arbol, 0, 0, false);
         base_characters.add(reliquia);
 
         try {
@@ -147,6 +148,7 @@ public class controllerSingleton {
         this.capacidadPersonajes = cantidad;
     }
     public void setNumeroPartida(int numeroPartida) {this.numeroPartida = numeroPartida;}
+    public void setNivel(int nivel) {this.nivel = nivel;}
 
     public void addEnemy(Character pj) {
         this.enemigos.add(pj);
@@ -223,10 +225,6 @@ public class controllerSingleton {
     }
 
     public void subirNivel() {
-        for (Character character : this.generated_characters) {
-            double porcentaje = ThreadLocalRandom.current().nextDouble(5, 21) / 100;
-            character.subirEstadisticas(porcentaje);
-        }
     }
 
     //FUNCIONES TABLERO
@@ -268,5 +266,33 @@ public class controllerSingleton {
         }
     }
 
+    public void clearTablero(){
+        for( int i = 0; i < tablero.length; i++ )
+            Arrays.fill( tablero[i], null );
+    }
 
+//FLUJO DEL JUEGO
+    public void avanzarNivel(int nivel){
+        int nivelAntiguo = getNivel();
+        int diferenciaNiveles = nivel - nivelAntiguo;
+        setNivel(nivel);
+        clearTablero();
+        getGeneratedCharacters().clear();
+        setMainCharacter(null);
+        setCapacidadPersonajes(20);
+        if (diferenciaNiveles != 0){
+            setCapacidadPersonajes(getCapacidad()+(5*(nivel-1)));
+            mejorarPersonajes(diferenciaNiveles);
+        }
+        Tablero tablero = new Tablero();
+    }
+
+    public void mejorarPersonajes(int diferenciaNivel){
+        for (int i = 0; i<=diferenciaNivel; i++){
+            for (Character character : getBaseCharacters()) {
+                int porcentaje = ThreadLocalRandom.current().nextInt(5, 21) / 100;
+                character.subirEstadisticas(porcentaje);
+            }
+        }
+    }
 }
